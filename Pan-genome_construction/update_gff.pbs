@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source ~/.bashrc
+conda activate panaroo
+panaroo-generate-gffs -t 16 -i ./GFFs/*.gff -o ./
