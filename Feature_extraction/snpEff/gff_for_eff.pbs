@@ -1,0 +1,19 @@
+#!/bin/bash
+#PBS -N batch_prokka_gff
+#PBS -o ./prokkaEff.out
+#PBS -e ./prokkaEff.err
+#PBS -q batch
+#PBS -l nodes=node1:ppn=1
+
+source ~/.bashrc
+conda activate Prokka
+
+list_path="/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/alignment/"
+for gene in `ls $list_path`
+do
+    cd /data/home/sfwang/software/snpEff/data/genomes
+    prokka ${gene}.fa --outdir /data/home/sfwang/software/snpEff/data/${gene} --force
+    mv /data/home/sfwang/software/snpEff/data/${gene}/PROKKA_01032026.gff /data/home/sfwang/software/snpEff/data/${gene}/genes.gff
+    rm -rf /data/home/sfwang/software/snpEff/data/${gene}/PROKKA_01032026.*
+    echo $gene
+done
