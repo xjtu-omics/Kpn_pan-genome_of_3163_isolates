@@ -1,5 +1,154 @@
-# Kpn_pan-genome_of_3163_isolates
+# Kpn Pan-Genome Analysis of 3,163 Isolates
 
-6.11 0:54 \
-目前代码上传进度: Further_analyzation文件夹内容待上传、Plot文件夹内容待上传。主体pipline的代码已经上传完毕。\
-可能需要调整的地方：部分文件中大量的无效import（尤指test.py）、代码中大量的真实路径 
+This repository contains scripts, trained models, and plotting utilities for a pan-genome-based analysis of 3,163 *Klebsiella pneumoniae* isolates. The workflow covers pan-genome construction, feature extraction, feature selection, candidate determination, model training, downstream analysis, and figure generation.
+
+## Project Structure
+
+```text
+Kpn_pan-genome_of_3163_isolates/
+|-- README.md
+|-- .gitignore
+|-- Pan-genome_construction/
+|   |-- Prokka_annotation.pbs
+|   |-- run_Panaroo.pbs
+|   |-- update_gff.pbs
+|   |-- average_cluster_sequence.py
+|   |-- longCentroidID_ref_from_gml.py
+|   |-- AMR/
+|   |   |-- AMR_annotate_csv.py
+|   |   |-- AMR_annotate_fasta.pbs
+|   |   |-- map_amr_and_panaroo.py
+|   |   |-- rgi-annotation.pbs
+|   |   `-- rgi_result_analyse.py
+|   `-- cleaning_and_postupdate/
+|       |-- clean_gene_presence_absence.py
+|       |-- clean_msa_outliers.py
+|       |-- classify_msa_by_ids.py
+|       |-- contig_index_transform.py
+|       |-- filt_serious_diff.py
+|       |-- move_invalid_msa.py
+|       |-- msa_contig_length_stats.py
+|       `-- remove-.py
+|-- Feature_extraction/
+|   |-- concat_core_feature_matrix.py
+|   |-- generate_dispensable_fm.py
+|   |-- vcf2matrix.py
+|   |-- snpEff/
+|   |   |-- add_configure.py
+|   |   |-- add_gff_info.py
+|   |   |-- generate_gff.pbs
+|   |   |-- make_genomes_folders.py
+|   |   |-- ref_to_genomes_folder.py
+|   |   |-- synonym_annotation.pbs
+|   |   `-- synonym_annotation_sp.pbs
+|   `-- variant_call/
+|       |-- align-merge.pbs
+|       |-- extract_gn_contigs.py
+|       |-- generate_align_reference.py
+|       |-- ref_for_alignment.py
+|       `-- split_msa_by_contig.py
+|-- Feature_selection/
+|   |-- ML_sort/
+|   |   |-- LR.py
+|   |   |-- RF.py
+|   |   |-- SVM.py
+|   |   |-- XGboost.py
+|   |   `-- script.py
+|   `-- statistical_test/
+|       |-- chi_analyse.py
+|       |-- chi_kw.py
+|       |-- kw_analyse.py
+|       `-- toolkit.py
+|-- Candidates_determine_and_model_train/
+|   |-- ReadMe.txt
+|   |-- ensemble_avg.py
+|   |-- find_Kmed_avg.py
+|   |-- list2fm.py
+|   |-- model_save.py
+|   |-- selected_fm.py
+|   |-- test.py
+|   `-- validation.py
+|-- Further_analyzation/
+|   |-- find_genes_position_pattern.py
+|   `-- pattern_cochran_armitage_analyze.py
+|-- Plot/
+|   |-- Main-Figures/
+|   |   |-- 2a.py
+|   |   |-- 2b-data.py
+|   |   |-- 2b.py
+|   |   |-- 2c.R
+|   |   |-- 2c.py
+|   |   |-- 2d-data.py
+|   |   |-- 2e-data.py
+|   |   |-- 2e.py
+|   |   |-- 2f-bar.py
+|   |   |-- 2f-data.py
+|   |   |-- 2f-pie.py
+|   |   `-- 2ghi.py
+|   `-- Supplement_Figures/
+|       `-- sfig5.py
+`-- Trained_models/
+    |-- AMK_best_model.pkl
+    |-- CAZ_best_model.pkl
+    |-- CIP_best_model.pkl
+    |-- CXM_best_model.pkl
+    |-- CZO_best_model.pkl
+    |-- ETP_best_model.pkl
+    |-- FOX_best_model.pkl
+    |-- GEN_best_model.pkl
+    |-- IPM_best_model.pkl
+    |-- LVX_best_model.pkl
+    |-- MEM_best_model.pkl
+    |-- NIT_best_model.pkl
+    |-- SAM_best_model.pkl
+    |-- SXT_best_model.pkl
+    |-- TCY_best_model.pkl
+    |-- TOB_best_model.pkl
+    `-- TZP_best_model.pkl
+```
+
+## Directory Guide
+
+| Directory | Purpose |
+| --- | --- |
+| `Pan-genome_construction/` | Builds and post-processes the pan-genome, including genome annotation, Panaroo execution, GFF updates, AMR annotation, and cleaning of pan-genome outputs. |
+| `Feature_extraction/` | Converts pan-genome, variant, and annotation outputs into feature matrices for downstream analysis and modeling. |
+| `Feature_selection/` | Selects and ranks informative features using statistical tests and machine-learning based sorting methods. |
+| `Candidates_determine_and_model_train/` | Determines candidate features, prepares selected feature matrices, trains models, validates performance, and saves model artifacts. |
+| `Further_analyzation/` | Performs downstream analyses such as gene position pattern discovery and Cochran-Armitage trend analysis. |
+| `Plot/` | Contains scripts and helper data files for generating main and supplementary figures. |
+| `Trained_models/` | Stores serialized trained model artifacts for different antimicrobial phenotypes. |
+
+## Workflow Overview
+
+```text
+Genome assemblies
+      |
+      v
+Pan-genome construction and AMR annotation
+      |
+      v
+Feature extraction from pan-genome, SNP, and annotation outputs
+      |
+      v
+Feature selection by statistical tests and ML-based ranking
+      |
+      v
+Candidate determination and model training
+      |
+      v
+Trained models, downstream analysis, and publication figures
+```
+
+## File Type Notes
+
+- `.pbs` files are batch scripts intended for cluster or high-performance computing environments.
+- `.py` files contain Python utilities for data processing, analysis, model training, and plotting.
+- `.R` files contain R-based plotting or analysis scripts.
+- `.pkl` files in `Trained_models/` are serialized trained model artifacts.
+
+## Documentation Notes
+
+- Several scripts may contain environment-specific paths and should be reviewed before rerunning the workflow on another machine.
+- The repository is organized by analysis stage, so each top-level directory represents one major part of the pipeline.
+- Additional usage examples, input requirements, software dependencies, and expected outputs can be added to this README as the documentation is expanded.
