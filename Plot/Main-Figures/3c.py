@@ -65,7 +65,7 @@ def plot_metrics(data):
 
     # 显示图
     # ②这改文件名，含指标种类和数据集种类
-    plt.savefig("C:/Users/yxLig/Nutstore/1/我的坚果云 (2)/Klebsiella_pneumoniae/Figures-re/fig4/4b-test.pdf")
+    plt.savefig("./Figures-re/fig4/4b-test.pdf")
 
 
 if __name__ == "__main__":

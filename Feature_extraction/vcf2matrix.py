@@ -3,7 +3,7 @@ import os
 import numpy as np
 import json
 
-pheno_csvpath="/data/home/sfwang/kpn/Panaroo-DownStream-both/phenotypes.csv"
+pheno_csvpath="./Panaroo-DownStream-both/phenotypes.csv"
 phenos=pd.read_csv(pheno_csvpath,index_col=0)
 GN_list=phenos.index.tolist()
 
@@ -103,10 +103,10 @@ def filt_rare(df: pd.DataFrame, threshold: int = 3) -> pd.DataFrame:
 if __name__=='__main__':
 
     # 这块记得改读写路径
-    read_path="/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/ann_vcf/"
-    write_path="/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/feature_matrix/"
+    read_path="./both-align-results-strict-adv/ann_vcf/"
+    write_path="./both-align-results-strict-adv/feature_matrix/"
 
-    with open("/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/amr_panaroo_dict.json", "r", encoding="utf-8") as f:
+    with open("./both-align-results-strict-adv/amr_panaroo_dict.json", "r", encoding="utf-8") as f:
         amr_map_panaroo = json.load(f)
 
     files = os.listdir(read_path)

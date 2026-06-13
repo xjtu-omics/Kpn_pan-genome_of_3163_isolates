@@ -11,7 +11,7 @@ os.environ["PYTHONHASHSEED"] = "0"
 os.environ["OMP_NUM_THREADS"] = "1"
 
 # 读RS耐药表型数据
-phenos=pd.read_csv("/data/home/sfwang/kpn/Panaroo-DownStream-both/phenotypes.csv",index_col=0)
+phenos=pd.read_csv("./Panaroo-DownStream-both/phenotypes.csv",index_col=0)
 
 # 读取抗生素名
 #med_list=phenos.columns.tolist()
@@ -19,7 +19,7 @@ med_list=['TZP']
 K_list=[35]
 
 # 读统计检验过滤结果
-chi_kw_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/statistics-test/"
+chi_kw_path="./Panaroo-DownStream-both/statistics-test/"
 with open(chi_kw_path+'chi_and_kw_core.json', 'r', encoding='utf-8') as file:
     chi_and_kw_core = json.load(file)
 with open(chi_kw_path+'chi_and_kw_dispensable.json', 'r', encoding='utf-8') as file:
@@ -27,8 +27,8 @@ with open(chi_kw_path+'chi_and_kw_dispensable.json', 'r', encoding='utf-8') as f
 
 if __name__=='__main__':
 
-    root_save_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/"
-    root_read_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/"
+    root_save_path="./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/"
+    root_read_path="./Panaroo-DownStream-both/"
 
     for i in range(len(med_list)):
 

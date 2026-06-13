@@ -10,7 +10,7 @@ mpl.rcParams['font.family'] = 'Arial'
 model_list=['rf','lr','svm','xgb']
 med_list = ['CZO','FOX','CXM','CAZ','ETP','IPM','MEM','SAM','TZP','GEN','AMK','TOB','TCY','CIP','LVX','NIT','SXT']
 
-target_dir = "/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result/"
+target_dir = "./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result/"
 folder_list = [f for f in os.listdir(target_dir) if os.path.isdir(os.path.join(target_dir, f))]
 dis_feature_list=[]
 core_feature_list=[]
@@ -34,7 +34,7 @@ pass_model = pass_model.fillna(0)
 print(pass_model)
 print(pass_model.shape)
 
-folder_path='/data/home/sfwang/kpn/Panaroo-DownStream-both/ml_sort/'
+folder_path='./Panaroo-DownStream-both/ml_sort/'
 thr_list=[100,100,100,100,100,100,60,100,35,100,50,100,100,50,100,100,100]
 for i in range(0,17,1):
     med=med_list[i]

@@ -31,16 +31,16 @@ MEDS = [
 
 # ---------- You only need to edit these paths ----------
 MODEL_PATH_TEMPLATE: Path | None = Path(
-    "/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result/{med}/best_model.pkl"
+    "./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result/{med}/best_model.pkl"
 )
 MODEL_PATH_BY_MED: Dict[str, Path] = {}
 
 # Test/Validation CSV path templates. Each CSV must include one "label" column.
 TEST_PATH_TEMPLATE: Path | None = Path(
-    "/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_test/result_test_matrix/{med}.csv"
+    "./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_test/result_test_matrix/{med}.csv"
 )
 VALIDATION_PATH_TEMPLATE: Path | None = Path(
-    "/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_test/result_validation_matrix/{med}.csv"
+    "./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_test/result_validation_matrix/{med}.csv"
 )
 TEST_PATH_BY_MED: Dict[str, Path] = {}
 VALIDATION_PATH_BY_MED: Dict[str, Path] = {}

@@ -3,10 +3,10 @@ from scipy.stats import kruskal
 from toolkit import merge_label_to_fm
 
 # 读RS耐药表型数据
-pheno_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/phenotypes.csv"
+pheno_path="./Panaroo-DownStream-both/phenotypes.csv"
 phenos=pd.read_csv(pheno_path,index_col=0)
 
-fm_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/final_core_feature_matrix.csv"
+fm_path="./Panaroo-DownStream-both/final_core_feature_matrix.csv"
 fm=pd.read_csv(fm_path,index_col=0)
 
 # 移除方差为0的特征（所有值相同）
@@ -57,4 +57,4 @@ for med in med_list:
         'P-Value': p_values
     })
 
-result.to_csv("/data/home/sfwang/kpn/Panaroo-DownStream-both/statistics-test/core_kw.csv")
+result.to_csv("./Panaroo-DownStream-both/statistics-test/core_kw.csv")

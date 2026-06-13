@@ -16,14 +16,14 @@ default_csv <- find_first_existing(c(
   "../../Figures-re/fig4部分相关数据/supplement/phenotypes_3163.csv",
   "../Figures-re/fig4部分相关数据/supplement/phenotypes_3163.csv",
   "./phenotypes_3163.csv",
-  "c:/Users/DELL/Nutstore/1/我的坚果云/Klebsiella_pneumoniae/Figures-re/fig4部分相关数据/supplement/phenotypes_3163.csv"
+  "./Figures-re/fig4部分相关数据/supplement/phenotypes_3163.csv"
 ))
 
 corrected_default_csv <- find_first_existing(c(
   "../../Figures-re/fig4部分相关数据/supplement/phenotypes_3163.csv",
   "../Figures-re/fig4部分相关数据/supplement/phenotypes_3163.csv",
   "./phenotypes_3163.csv",
-  "c:/Users/DELL/Nutstore/1/我的坚果云/Klebsiella_pneumoniae/Figures-re/fig4部分相关数据/supplement/phenotypes_3163.csv"
+  "./Figures-re/fig4部分相关数据/supplement/phenotypes_3163.csv"
 ))
 if (!is.na(corrected_default_csv)) {
   default_csv <- corrected_default_csv

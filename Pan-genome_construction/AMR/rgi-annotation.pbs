@@ -3,15 +3,15 @@
 #PBS -o ./rgi_annotation.out
 #PBS -e ./rgi_annotation.err
 #PBS -q fat
-#PBS -l nodes=fat1:ppn=32
+#PBS -l nodes=1:ppn=32
 
 source ~/.bashrc
 conda activate RGI
-cd /data/home/sfwang/kpn/Panaroo/
+cd ./
 
 # 设置变量
-GFF_DIR="/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/postpanaroo_gffs/"  # GFF 文件所在目录
-OUTPUT_BASE_DIR="/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/postpanaroo_fas/"  # 输出目录
+GFF_DIR="./both-align-results-strict-adv/postpanaroo_gffs/"  # GFF 文件所在目录
+OUTPUT_BASE_DIR="./both-align-results-strict-adv/postpanaroo_fas/"  # 输出目录
 THREADS=32  # Python 脚本使用的线程数
 
 # 创建必要的目录
@@ -171,7 +171,7 @@ EOF
     fi
 
     # 步骤2: 运行 RGI 分析
-    output_dir="/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/rgi_results/${file_stem}"
+    output_dir="./both-align-results-strict-adv/rgi_results/${file_stem}"
     mkdir -p "$output_dir"
 
     echo "2. 运行 RGI main 分析..."

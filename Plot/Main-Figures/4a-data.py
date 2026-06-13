@@ -138,12 +138,12 @@ def main() -> None:
     )
     parser.add_argument(
         "--xlsx",
-        default=r"c:\Users\yxLig\Nutstore\1\我的坚果云 (2)\Klebsiella_pneumoniae\Figures-re\fig5相关数据\supplement\features_analyse.xlsx",
+        default=r"./Figures-re\fig5相关数据\supplement\features_analyse.xlsx",
         help="Input feature analysis xlsx path.",
     )
     parser.add_argument(
         "--fasta",
-        default=r"c:\Users\yxLig\Nutstore\1\我的坚果云 (2)\Klebsiella_pneumoniae\Figures-re\fig4部分相关数据\supplement\dispensable_genes_17meds_longCentroidID_prot.fa",
+        default=r"./Figures-re\fig4部分相关数据\supplement\dispensable_genes_17meds_longCentroidID_prot.fa",
         help="Input FASTA path.",
     )
     parser.add_argument(

@@ -17,12 +17,12 @@ import joblib
 def model_test(med, labeled_data):
 
     # 导入训练时用的特征矩阵（原始训练数据或列名）
-    train_df = pd.read_csv(f"/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_train_matrix/{med}.csv", index_col=0)  # 训练时的特征矩阵
+    train_df = pd.read_csv(f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_train_matrix/{med}.csv", index_col=0)  # 训练时的特征矩阵
     train_df = train_df.sort_index(axis=1)
     model_features = list(train_df.columns)  # 按训练时的列顺序保存
 
     # 导入训练好的模型
-    model = joblib.load(f"/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/{med}/model_train_final.pkl")
+    model = joblib.load(f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/{med}/model_train_final.pkl")
 
     # 预测
     X = labeled_data[model_features]
@@ -71,15 +71,15 @@ def model_test(med, labeled_data):
 if __name__ == "__main__":
 
     # 获取药物列表
-    feature_folder_path="/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/"
+    feature_folder_path="./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/"
     folder_list = [f for f in os.listdir(feature_folder_path)]
     #folder_list = ['ETP'] # 只跑NIT
 
     # 拿test对应的特征矩阵来训练
     for med in folder_list:
         print(med)
-        df=pd.read_csv(f"/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_test_matrix/{med}.csv", index_col=0)
+        df=pd.read_csv(f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_test_matrix/{med}.csv", index_col=0)
         result=model_test(med, df)
-        with open(f"/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/test_result/{med}.txt", "w") as f:
+        with open(f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/test_result/{med}.txt", "w") as f:
             for key, value in result.items():
                 f.write(f'{key}: {value}\n')

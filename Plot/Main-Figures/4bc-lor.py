@@ -33,7 +33,7 @@ for (row, col), cell in table.get_celld().items():
 plt.tight_layout()
 
 # 如果要保存 PDF：
-save_path = "C:\\Users\\yxLig\\Nutstore\\1\\我的坚果云 (2)\\Klebsiella_pneumoniae\\Figures-re\\fig5"
+save_path = "./Figures-re\\fig5"
 plt.savefig(save_path + "\\5d-ompA-NIT-LorData.pdf", format="pdf", bbox_inches="tight")
 
 plt.show()

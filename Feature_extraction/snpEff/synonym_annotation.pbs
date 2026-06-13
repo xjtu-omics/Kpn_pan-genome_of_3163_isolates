@@ -1,18 +1,14 @@
 #!/bin/bash
-#PBS -N snpEff_part_10
-#PBS -o ./snpEff_part_10.out
-#PBS -e ./snpEff_part_10.err
-#PBS -q batch
-#PBS -l nodes=node14:ppn=1
+#PBS -l nodes=1:ppn=1
 
 source ~/.bashrc
 conda activate kpn
 
-cd /data/home/sfwang/software/snpEff/
-list_path="/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/grouped_vcf/part_10/"
+cd ./snpEff/
+list_path="./both-align-results-strict-adv/grouped_vcf/part_10/"
 for file in `ls $list_path`
 do
 gene=${file:0:-4}
 java -jar snpEff.jar build -gff3 -v -noCheckProtein -noCheckCds $gene
-java -jar snpEff.jar ann $gene /data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/grouped_vcf/part_10/${gene}.vcf > ./result-kpn-both/${gene}.ann.vcf
+java -jar snpEff.jar ann $gene ./both-align-results-strict-adv/grouped_vcf/part_10/${gene}.vcf > ./result-kpn-both/${gene}.ann.vcf
 done

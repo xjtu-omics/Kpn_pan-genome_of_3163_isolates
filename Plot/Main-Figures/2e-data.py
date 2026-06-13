@@ -124,7 +124,7 @@ def count_variants_in_directory(directory):
     return variant_counts
 
 # 修改路径为你的 VCF 文件夹路径
-vcf_dir = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/ann_vcf/"
+vcf_dir = "./both-align-results-strict-adv/ann_vcf/"
 variant_counts = count_variants_in_directory(vcf_dir)
 
 print("🧬 Total variant counts across all VCF files:")

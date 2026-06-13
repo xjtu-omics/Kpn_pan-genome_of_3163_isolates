@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 输入文件
-panaroo_csv = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/gene_presence_absence.csv"
+panaroo_csv = "./both-align-results-strict-adv/gene_presence_absence.csv"
 abricate_files = {
     "CARD": "./AMR_annotation/both_card_results_longCentroidID.tab",
     "NCBI": "./AMR_annotation/both_ncbi_results_longCentroidID.tab",

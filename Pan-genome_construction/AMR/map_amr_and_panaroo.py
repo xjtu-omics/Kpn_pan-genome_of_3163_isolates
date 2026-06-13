@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 # 读取 CSV
-df = pd.read_csv("/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/amr_gene_presence_absence.csv")
+df = pd.read_csv("./both-align-results-strict-adv/amr_gene_presence_absence.csv")
 
 # 在 AMR name 前加上前缀
 df["AMR name"] = "amr_" + df["AMR name"].astype(str)

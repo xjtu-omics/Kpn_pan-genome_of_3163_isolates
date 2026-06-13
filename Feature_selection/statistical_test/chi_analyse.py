@@ -21,11 +21,11 @@ def cal_chi(pheno_list,feature_list):
 
     return R0,R1,S0,S1
 
-pheno_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/phenotypes.csv"
+pheno_path="./Panaroo-DownStream-both/phenotypes.csv"
 pheno=pd.read_csv(pheno_path,index_col=0)
 med_class=pheno.columns.tolist()
 
-fm_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/final_core_feature_matrix.csv"
+fm_path="./Panaroo-DownStream-both/final_core_feature_matrix.csv"
 fm=pd.read_csv(fm_path,index_col=0)
 variants=fm.columns.tolist()
 df=pd.DataFrame(columns=med_class,index=variants)
@@ -46,4 +46,4 @@ for index,value in df.iterrows(): #遍历每一个变异
             df.at[index,column]=chi2_contingency(chi_arr).pvalue
         else:
             df.at[index,column]=float('nan')
-df.to_csv("/data/home/sfwang/kpn/Panaroo-DownStream-both/statistics-test/core_chisquare.csv")
+df.to_csv("./Panaroo-DownStream-both/statistics-test/core_chisquare.csv")

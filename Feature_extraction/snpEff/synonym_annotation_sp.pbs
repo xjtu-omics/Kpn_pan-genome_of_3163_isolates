@@ -1,14 +1,10 @@
 #!/bin/bash
-#PBS -N snpEff_add
-#PBS -o ./snpEff_add.out
-#PBS -e ./snpEff_add.err
-#PBS -q batch
-#PBS -l nodes=node14:ppn=1
+#PBS -l nodes=1:ppn=1
 
 source ~/.bashrc
 conda activate kpn
 
-cd /data/home/sfwang/software/snpEff/
+cd ./snpEff/
 
 list_file="empty_files.txt"
 
@@ -22,7 +18,7 @@ while IFS= read -r file; do
         -gff3 -v -noCheckProtein -noCheckCds "$gene"
 
     java -jar snpEff.jar ann "$gene" \
-        "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/vcf/${gene}.vcf" \
-        > "/data/home/sfwang/software/snpEff/result-kpn-both-add/${gene}.ann.vcf"
+        "./both-align-results-strict-adv/vcf/${gene}.vcf" \
+        > "./snpEff/result-kpn-both-add/${gene}.ann.vcf"
 
 done < "$list_file"

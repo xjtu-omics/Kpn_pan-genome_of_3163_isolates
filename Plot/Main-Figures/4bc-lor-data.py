@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 
 # === 读取数据 ===
-fpath="C:\\Users\\yxLig\\Nutstore\\1\\我的坚果云 (2)\\Klebsiella_pneumoniae\\Figures-re\\fig5相关数据\\5a-group_258.csv"
+fpath="./Figures-re\\fig5相关数据\\5a-group_258.csv"
 features = pd.read_csv(fpath, index_col=0)
-ppath="C:\\Users\\yxLig\\Nutstore\\1\\我的坚果云 (2)\\Klebsiella_pneumoniae\\Figures-re\\fig5相关数据\\supplement\\phenotypes_3163.csv"
+ppath="./Figures-re\\fig5相关数据\\supplement\\phenotypes_3163.csv"
 phenotypes = pd.read_csv(ppath, index_col=0)
 
 # === 设置目标基因（你要画哪一个）===

@@ -10,7 +10,7 @@ mpl.rcParams.update({
 })
 
 # 读取数据
-path = "C:/Users/yxLig/Nutstore/1/我的坚果云 (2)/Klebsiella_pneumoniae/Figures-re/fig4部分相关数据/a-candidates_distribution.xlsx"
+path = "./Figures-re/fig4部分相关数据/a-candidates_distribution.xlsx"
 df = pd.read_excel(path, sheet_name='med', index_col=0)
 
 # 选择两列（这里假设选择前两列，你可以根据需要修改）

@@ -26,6 +26,6 @@ def extract_and_rename_files(source_dir, target_dir):
         print(f"操作失败：{e}")
 
 # 示例使用
-source_directory = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/alignment/"  # 替换为包含子文件夹的源目录
-target_directory = "/data/home/sfwang/software/snpEff/data/genomes/"        # 替换为目标目录路径
+source_directory = "./both-align-results-strict-adv/alignment/"  # 替换为包含子文件夹的源目录
+target_directory = "./snpEff/data/genomes/"        # 替换为目标目录路径
 extract_and_rename_files(source_directory, target_directory)

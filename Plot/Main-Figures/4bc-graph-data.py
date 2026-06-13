@@ -66,12 +66,12 @@ def transform(fm):
 
 if __name__=='__main__':
 
-    file_path="C:\\Users\\yxLig\\Nutstore\\1\\我的坚果云 (2)\\Klebsiella_pneumoniae\\Figures-re\\fig5相关数据\\fucK.ann.vcf"
+    file_path="./Figures-re\\fig5相关数据\\fucK.ann.vcf"
     fm1=vcf_process(file_path)
     fm2=feature_matrix(fm1)
     fm3=transform(fm2)
     #得到每条基因的特征构成的矩阵
-    #fm3.to_csv("C:/Users/yxLig/Nutstore/1/我的坚果云 (2)/Klebsiella_pneumoniae/Figures-new/fig5-中间文件/rsxC_2~~~rsxC_3~~~rsxC_1_test.csv")
+    #fm3.to_csv("./Figures-new/fig5-中间文件/rsxC_2~~~rsxC_3~~~rsxC_1_test.csv")
     path00=[]
     path01=[]
     path10=[]

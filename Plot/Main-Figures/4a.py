@@ -218,7 +218,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--input",
-        default=r"c:\Users\DELL\Desktop\core_dis.list.xls",
+        default=r"./core_dis.list.xls",
         help="Input KEGG table path (tab-delimited text).",
     )
     parser.add_argument(

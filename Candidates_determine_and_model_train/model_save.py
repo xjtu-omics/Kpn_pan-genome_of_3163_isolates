@@ -20,7 +20,7 @@ os.environ["OMP_NUM_THREADS"] = "1"
 
 def ens_soft(labeled_data, med):
 
-    save_path = f"/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/{med}/"
+    save_path = f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/{med}/"
 
     labeled_data = labeled_data.sort_index(axis=0)
     X = labeled_data.drop(columns=["label"])
@@ -169,7 +169,7 @@ def ens_soft(labeled_data, med):
 
 if __name__=='__main__':
 
-    folder_path = "/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_train_matrix/"
+    folder_path = "./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_train_matrix/"
 
     for root, dirs, files in os.walk(folder_path):
 

@@ -16,8 +16,8 @@ def read_data(filename):
             data.append((strain, n50))
     return data
 # 读取数据
-data1 = read_data("C:/Users/yxLig/Nutstore/1/我的坚果云 (2)/Klebsiella_pneumoniae/figures-trial/fig2-中间文件/Contig_n50_1174.txt")
-data2 = read_data("C:/Users/yxLig/Nutstore/1/我的坚果云 (2)/Klebsiella_pneumoniae/figures-trial/fig2-中间文件/Contig_n50_491.txt")
+data1 = read_data("./figures-trial/fig2-中间文件/Contig_n50_1174.txt")
+data2 = read_data("./figures-trial/fig2-中间文件/Contig_n50_491.txt")
 
 # 合并数据，附加来源标签
 all_data = [(x[0], x[1], 'Pure short-read assembly') for x in data1] + \

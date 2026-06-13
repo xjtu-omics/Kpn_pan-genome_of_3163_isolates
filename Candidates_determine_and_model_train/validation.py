@@ -4,11 +4,11 @@ import pandas as pd
 from sklearn.metrics import roc_auc_score
 
 # 从之前分好的validation数据集里拿特征列和表型，组成验证用的矩阵，并保存
-model_root = "/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result"
-fm_root = "/data/home/sfwang/kpn/Panaroo-DownStream-both/ml_sort"
-train_root = "/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result_train_matrix"
-val_fm_save_root = "/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result_validation_matrix"
-metrices_save_root = "/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/validation_result"
+model_root = "./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result"
+fm_root = "./Panaroo-DownStream-both/ml_sort"
+train_root = "./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result_train_matrix"
+val_fm_save_root = "./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result_validation_matrix"
+metrices_save_root = "./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/validation_result"
 
 for med in os.listdir(fm_root):
 

@@ -11,14 +11,14 @@ def get_file_names_without_extension(folder_path):
     return file_names
 
 if __name__=='__main__':
-    folder_path = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/core_gene_references/"
+    folder_path = "./both-align-results-strict-adv/core_gene_references/"
     file_names = get_file_names_without_extension(folder_path) # 获取不带后缀的文件名列表（所有基因名列表）
     print(len(file_names))
 
-    snp_configure_path="/data/home/sfwang/software/snpEff/snpEff.config"
+    snp_configure_path="./snpEff/snpEff.config"
     with open(snp_configure_path,'a') as wfile:
         for gene in file_names:
             wfile.write('\n'+gene+'.genome : '+gene)
-            wfile.write('\n'+gene+'.reference : /data/home/sfwang/software/snpEff/data/genomes/')
+            wfile.write('\n'+gene+'.reference : ./snpEff/data/genomes/')
             wfile.write('\n'+gene+'.retrieval_date : 2025.10.05')
             wfile.write('\n')

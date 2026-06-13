@@ -2,8 +2,8 @@ import os
 import shutil
 
 # 输入源文件夹和目标文件夹路径
-src_dir = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/core_gene_references/"           # 源文件夹
-dst_dir = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/alignment/"           # 目标文件夹
+src_dir = "./both-align-results-strict-adv/core_gene_references/"           # 源文件夹
+dst_dir = "./both-align-results-strict-adv/alignment/"           # 目标文件夹
 
 # 确保目标文件夹存在
 os.makedirs(dst_dir, exist_ok=True)

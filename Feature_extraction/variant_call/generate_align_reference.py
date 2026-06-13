@@ -32,9 +32,9 @@ def read_json_file(json_file_path):
     with open(json_file_path, 'r') as json_file:
         return json.load(json_file)
 
-folder_path = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/core_gene_references/"  # 文件夹路径
-output_file = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/all_core_align_references.fasta"  # 合并后的fasta文件
-json_dict = read_json_file("/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/amr_panaroo_dict.json")
+folder_path = "./both-align-results-strict-adv/core_gene_references/"  # 文件夹路径
+output_file = "./both-align-results-strict-adv/all_core_align_references.fasta"  # 合并后的fasta文件
+json_dict = read_json_file("./both-align-results-strict-adv/amr_panaroo_dict.json")
 
 replace_contig_name(folder_path, output_file, json_dict)
 

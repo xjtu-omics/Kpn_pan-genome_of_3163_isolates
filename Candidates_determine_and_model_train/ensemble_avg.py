@@ -14,7 +14,7 @@ from sklearn.metrics import roc_auc_score
 
 def train_ensemble_with_cv(labeled_train_data, labeled_test_data, med, random_state=42, model_save=False):
 
-    save_path = f"/data/home/sfwang/kpn/Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result/{med}/"
+    save_path = f"./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result/{med}/"
 
     labeled_train_data = labeled_train_data.sort_index(axis=0)
     X_train = labeled_train_data.drop(columns=["label"])

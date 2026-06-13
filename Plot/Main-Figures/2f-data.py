@@ -14,7 +14,7 @@ def parse_ann_field(info_field):
 
 variant_counter = Counter()
 
-vcf_files = glob.glob("/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/ann_vcf/*.vcf")
+vcf_files = glob.glob("./both-align-results-strict-adv/ann_vcf/*.vcf")
 
 for file in vcf_files:
     open_func = gzip.open if file.endswith(".gz") else open

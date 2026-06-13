@@ -5,9 +5,9 @@ import pandas as pd
 from Bio import SeqIO
 
 # 输入路径
-input_dir = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/dispensable_gene_sequences/"   # 修改为你的文件夹路径
-mapping_json = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/amr_panaroo_dict.json"  # 存放列名映射关系的 JSON 文件
-output_csv = "/data/home/sfwang/kpn/Panaroo-DownStream-both/final_dispensable_fm.csv"
+input_dir = "./both-align-results-strict-adv/dispensable_gene_sequences/"   # 修改为你的文件夹路径
+mapping_json = "./both-align-results-strict-adv/amr_panaroo_dict.json"  # 存放列名映射关系的 JSON 文件
+output_csv = "./Panaroo-DownStream-both/final_dispensable_fm.csv"
 
 # 用正则提取组名：G 开头到第一个 ;
 sample_pattern = re.compile(r"^(G[^;]+)")

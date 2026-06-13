@@ -3,8 +3,8 @@ import os
 import re
 
 # 输入和输出文件夹路径
-input_folder = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/aligned_gene_sequences/"   # 改成你的原始msa fasta文件夹路径
-output_folder = "/data/home/sfwang/kpn/Panaroo/both-align-results-strict-adv/gene_sequences/" # 改成你想保存结果的文件夹路径
+input_folder = "./both-align-results-strict-adv/aligned_gene_sequences/"   # 改成你的原始msa fasta文件夹路径
+output_folder = "./both-align-results-strict-adv/gene_sequences/" # 改成你想保存结果的文件夹路径
 
 # 如果输出文件夹不存在就创建
 os.makedirs(output_folder, exist_ok=True)

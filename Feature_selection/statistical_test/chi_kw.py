@@ -8,7 +8,7 @@ import os
 
 result_dict={}
 
-pheno_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/phenotypes.csv"
+pheno_path="./Panaroo-DownStream-both/phenotypes.csv"
 phenos=pd.read_csv(pheno_path,index_col=0)
 med_list=phenos.columns.tolist()
 for med in med_list:
@@ -27,12 +27,12 @@ def select_significance(df_chi,df_kw,gene):
 
 if __name__ == "__main__":
 
-    chi_file_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/statistics-test/dispensable_chisquare.csv"
-    kw_file_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/statistics-test/dispensable_kw.csv"
+    chi_file_path="./Panaroo-DownStream-both/statistics-test/dispensable_chisquare.csv"
+    kw_file_path="./Panaroo-DownStream-both/statistics-test/dispensable_kw.csv"
 
     if os.path.exists(chi_file_path) and os.path.exists(kw_file_path):
         df_chi=pd.read_csv(chi_file_path,index_col=0)
         df_kw=pd.read_csv(kw_file_path,index_col=0)
         select_significance(df_chi,df_kw,'')
-    with open("/data/home/sfwang/kpn/Panaroo-DownStream-both/statistics-test/chi_and_kw_dispensable.json", 'w') as f:
+    with open("./Panaroo-DownStream-both/statistics-test/chi_and_kw_dispensable.json", 'w') as f:
         json.dump(result_dict, f, indent=4)

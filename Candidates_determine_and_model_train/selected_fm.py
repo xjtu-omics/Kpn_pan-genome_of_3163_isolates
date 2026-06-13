@@ -5,33 +5,33 @@ import pandas as pd
 
 # 读表型矩阵
 
-pheno_path="/data/home/sfwang/kpn/PATRIC_data/Drug_phenotypes.csv"
+pheno_path="./PATRIC_data/Drug_phenotypes.csv"
 phenos=pd.read_csv(pheno_path,index_col=0)
 '''
-phenos=pd.read_csv("/data/home/sfwang/kpn/Origin_data/Kpn_antibiotics_AST_phenotypes.csv",index_col=0)
+phenos=pd.read_csv("./Origin_data/Kpn_antibiotics_AST_phenotypes.csv",index_col=0)
 '''
 
 # 循环读取每个药物的特征列表，从dis_fm中抽取对应特征列，结合label组装训练矩阵
-feature_folder_path="/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/"
+feature_folder_path="./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/"
 folder_list = [f for f in os.listdir(feature_folder_path)] # 安徽医院样本的药物列表
 #folder_list = ['ETP'] # 只跑ETP
 
 for f in folder_list:
 
     # 读原始大特征矩阵(100%样本)
-    #whole_core_fm=pd.read_csv('/data/home/sfwang/kpn/Core/filted_whole_fm.csv',index_col=0)
-    #whole_dis_fm=pd.read_csv('/data/home/sfwang/kpn/Dispensable/filted_whole_fm.csv',index_col=0)
+    #whole_core_fm=pd.read_csv('./Core/filted_whole_fm.csv',index_col=0)
+    #whole_dis_fm=pd.read_csv('./Dispensable/filted_whole_fm.csv',index_col=0)
 
     # 读f药对应的core和dispensable两个特征矩阵(30%样本/70%样本)
     dataset="train"
-    whole_fm_path=f"/data/home/sfwang/kpn/Panaroo-DownStream-patric/ml_sort/result/{f}/"
+    whole_fm_path=f"./Panaroo-DownStream-patric/ml_sort/result/{f}/"
     whole_core_fm=pd.read_csv(whole_fm_path+'core_'+dataset+'_set.csv',index_col=0)
     whole_dis_fm=pd.read_csv(whole_fm_path+'dis_'+dataset+'_set.csv',index_col=0)
 
     core_list=[]
     dis_list=[]
     # 读特征文件
-    with open(f'/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/{f}/feature_select_result.txt','r') as file:
+    with open(f'./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/{f}/feature_select_result.txt','r') as file:
         for row in file:
             if 'pvalue' in row:
                 row_info=row.split(',')
@@ -47,4 +47,4 @@ for f in folder_list:
     total_fm = total_fm[total_fm['label'].isin(['R', 'S'])]
     total_fm['label'] = total_fm['label'].replace({'R': 1, 'S': 0})
 
-    total_fm.to_csv(f"/data/home/sfwang/kpn/Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_{dataset}_matrix/{f}.csv")
+    total_fm.to_csv(f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_{dataset}_matrix/{f}.csv")

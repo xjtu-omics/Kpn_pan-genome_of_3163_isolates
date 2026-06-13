@@ -41,19 +41,19 @@ def tt_split(df,result_path,med,type):
 if __name__ == '__main__':
 
     # 读RS耐药表型数据
-    pheno_path="/data/home/sfwang/kpn/Panaroo-DownStream-both/phenotypes.csv"
+    pheno_path="./Panaroo-DownStream-both/phenotypes.csv"
     phenos=pd.read_csv(pheno_path,index_col=0)
     # 读取35种抗生素名 
     #med_list=phenos.columns.tolist()
     med_list=['CFP','CMZ','CSL','CZA','DOX','MOX','NET','PIP','TMP']
 
     # 设置存放结果的根目录
-    result_path = '/data/home/sfwang/kpn/Panaroo-DownStream-both/ml_sort/'
+    result_path = './Panaroo-DownStream-both/ml_sort/'
 
     # 读入两个基本特征矩阵，并放入list
-    core_path = "/data/home/sfwang/kpn/Panaroo-DownStream-both/final_core_feature_matrix.csv"
+    core_path = "./Panaroo-DownStream-both/final_core_feature_matrix.csv"
     core = pd.read_csv(core_path,index_col=0)
-    dis_path = "/data/home/sfwang/kpn/Panaroo-DownStream-both/final_dispensable_feature_matrix.csv"
+    dis_path = "./Panaroo-DownStream-both/final_dispensable_feature_matrix.csv"
     dis = pd.read_csv(dis_path,index_col=0)
     fm_dict = {'core':core,'dis':dis}
 

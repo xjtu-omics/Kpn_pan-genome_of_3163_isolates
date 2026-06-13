@@ -4,7 +4,7 @@ import matplotlib as mpl
 
 mpl.rcParams['font.family'] = 'Arial'
 
-INPUT_FILE = "C:/Users/yxLig/Nutstore/1/我的坚果云 (2)/Klebsiella_pneumoniae/figures-new/fig2-中间文件/anhui_sample_gene_counts.txt"
+INPUT_FILE = "./figures-new/fig2-中间文件/anhui_sample_gene_counts.txt"
 OUTPUT_FILE = "gene_count_trapezoid_plot.pdf"
 
 def read_data(filename):
@@ -19,8 +19,8 @@ def read_data(filename):
             data[strain]=n50
     return data
 
-data1 = read_data("C:/Users/yxLig/Nutstore/1/我的坚果云 (2)/Klebsiella_pneumoniae/figures-new/fig2-中间文件/anhui_contig_n50_1174.txt")
-data2 = read_data("C:/Users/yxLig/Nutstore/1/我的坚果云 (2)/Klebsiella_pneumoniae/figures-new/fig2-中间文件/anhui_contig_n50_491.txt")
+data1 = read_data("./figures-new/fig2-中间文件/anhui_contig_n50_1174.txt")
+data2 = read_data("./figures-new/fig2-中间文件/anhui_contig_n50_491.txt")
 
 # 读取并排序
 data = []

@@ -25,7 +25,7 @@ def is_known_gene(gene_name: str, feature_type) -> bool:
 if __name__ == "__main__":
 
     # 读取CSV文件
-    csv_path = r"C:/Users/yxLig/Nutstore/1/我的坚果云 (2)/Klebsiella_pneumoniae/Figures-re/fig3部分相关数据/ab-candidate_features_summary.csv"
+    csv_path = r"./Figures-re/fig3部分相关数据/ab-candidate_features_summary.csv"
     
     df = pd.read_csv(csv_path)
     

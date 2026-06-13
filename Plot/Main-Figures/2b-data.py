@@ -36,6 +36,6 @@ def main(input_dir, output_file):
 
 if __name__ == "__main__":
     # 你可以修改下面的路径
-    input_directory = "/data/home/sfwang/kpn/GFFs/"  # GFF文件所在目录
+    input_directory = "./GFFs/"  # GFF文件所在目录
     output_txt = "./sample_gene_counts.txt"
     main(input_directory, output_txt)

@@ -4,7 +4,7 @@ import os
 
 def process_ml_sort(med,core_dis,thresh):
     # 对指定药物的指定类型的fm（core/dis），进行train上模型排序结果的4选2
-    path=f'/data/home/sfwang/kpn/Panaroo-DownStream-both/ml_sort/{med}/'
+    path=f'./Panaroo-DownStream-both/ml_sort/{med}/'
 
     if not os.path.exists(f"{path}{core_dis}_xgb_importance.csv"):
         return []
