@@ -49,37 +49,37 @@ for i in range(0,17,1):
     dfd_rf=pd.read_csv(f"{folder_path}{med}/dis_rf_importance.csv")
     for index, row in pass_model.iterrows():
         if '->' in index:
-            #核心基因
+            #Core genes
             if dfc_xgb[dfc_xgb['Feature'] == index].index[0]<threshold:
                 pass_model.loc[index, 'xgb']=1
             if dfc_lr[dfc_lr['Feature'] == index].index[0]<threshold:
-                pass_model.loc[index, 'lr']=1 
+                pass_model.loc[index, 'lr']=1
             if dfc_svm[dfc_svm['Feature'] == index].index[0]<threshold:
-                pass_model.loc[index, 'svm']=1 
+                pass_model.loc[index, 'svm']=1
             if dfc_rf[dfc_rf['Feature'] == index].index[0]<threshold:
-                pass_model.loc[index, 'rf']=1 
+                pass_model.loc[index, 'rf']=1
         else:
-            #非核心基因
+            #Dispensable genes
             if dfd_xgb[dfd_xgb['Feature'] == index].index[0]<threshold:
                 pass_model.loc[index, 'xgb']=1
             if dfd_lr[dfd_lr['Feature'] == index].index[0]<threshold:
-                pass_model.loc[index, 'lr']=1 
+                pass_model.loc[index, 'lr']=1
             if dfd_svm[dfd_svm['Feature'] == index].index[0]<threshold:
-                pass_model.loc[index, 'svm']=1 
+                pass_model.loc[index, 'svm']=1
             if dfd_rf[dfd_rf['Feature'] == index].index[0]<threshold:
-                pass_model.loc[index, 'rf']=1 
+                pass_model.loc[index, 'rf']=1
 
 pass_model.to_csv("./model_evidence_support_summary.csv")
 
 sets = {}
 for col in pass_model.columns:
     sets[col] = set(pass_model.index[pass_model[col] == 1])
-# 计算每种集合组合出现的次数
+# Count occurrences of each set combination
 comb_counter = Counter()
 for idx, row in pass_model.iterrows():
     key = ''.join(str(int(b)) for b in row)  # e.g., '1011'
     comb_counter[key] += 1
-# 用于 upsetplot：从0/1矩阵构造多集合关系
+# For upsetplot: construct multi-set relationships from the 0/1 matrix
 df_bool = pass_model.astype(bool)
 data = from_indicators(df_bool.columns.tolist(), df_bool)
 upset = UpSet(data, subset_size='count',show_counts=True)

@@ -1,8 +1,26 @@
 # Kpn Pan-Genome Analysis of 3,163 Isolates
 
-（非最终版，还在修改中）
+(Draft version; still under revision)
 
 This repository contains scripts, trained models, and plotting utilities for a pan-genome-based analysis of 3,163 *Klebsiella pneumoniae* isolates. The workflow covers pan-genome construction, feature extraction, feature selection, candidate determination, model training, downstream analysis, and figure generation.
+
+## Documentation Notes
+
+- Several scripts may contain environment-specific paths and should be reviewed before rerunning the workflow on another machine.
+- The repository is organized by analysis stage, so each top-level directory represents one major part of the pipeline.
+- Additional usage examples, input requirements, software dependencies, and expected outputs can be added to this README as the documentation is expanded.
+
+## Directory Guide
+
+| Directory | Purpose |
+| --- | --- |
+| `Pan-genome_construction/` | Builds and post-processes the pan-genome, including genome annotation, Panaroo execution, GFF updates, AMR annotation, and gene cluster cleaning of pan-genome outputs. |
+| `Feature_extraction/` | Identifies core-gene variants through single-base-resolution alignment, annotates variants with snpEff, retains non-synonymous variants, and encodes them together with dispensable gene presence/absence into binary feature matrices for downstream analysis and modeling. |
+| `Feature_selection/` | Selects and ranks informative features using statistical tests and machine-learning based sorting methods. |
+| `Candidates_determine_and_model_train/` | Determines candidate features, prepares selected feature matrices, trains models, validates performance, and saves model artifacts. |
+| `Further_analyzation/` | Performs downstream analyses such as gene position pattern discovery and Cochran-Armitage trend analysis. |
+| `Plot/` | Contains scripts for generating main and supplementary figures. |
+| `Trained_models/` | Stores serialized trained model artifacts for different antimicrobial phenotypes. |
 
 ## Project Structure
 
@@ -109,18 +127,6 @@ Kpn_pan-genome_of_3163_isolates/
     `-- TZP_best_model.pkl
 ```
 
-## Directory Guide
-
-| Directory | Purpose |
-| --- | --- |
-| `Pan-genome_construction/` | Builds and post-processes the pan-genome, including genome annotation, Panaroo execution, GFF updates, AMR annotation, and cleaning of pan-genome outputs. |
-| `Feature_extraction/` | Converts pan-genome, variant, and annotation outputs into feature matrices for downstream analysis and modeling. |
-| `Feature_selection/` | Selects and ranks informative features using statistical tests and machine-learning based sorting methods. |
-| `Candidates_determine_and_model_train/` | Determines candidate features, prepares selected feature matrices, trains models, validates performance, and saves model artifacts. |
-| `Further_analyzation/` | Performs downstream analyses such as gene position pattern discovery and Cochran-Armitage trend analysis. |
-| `Plot/` | Contains scripts and helper data files for generating main and supplementary figures. |
-| `Trained_models/` | Stores serialized trained model artifacts for different antimicrobial phenotypes. |
-
 ## Workflow Overview
 
 ```text
@@ -141,16 +147,3 @@ Candidate determination and model training
       v
 Trained models, downstream analysis, and publication figures
 ```
-
-## File Type Notes
-
-- `.pbs` files are batch scripts intended for cluster or high-performance computing environments.
-- `.py` files contain Python utilities for data processing, analysis, model training, and plotting.
-- `.R` files contain R-based plotting or analysis scripts.
-- `.pkl` files in `Trained_models/` are serialized trained model artifacts.
-
-## Documentation Notes
-
-- Several scripts may contain environment-specific paths and should be reviewed before rerunning the workflow on another machine.
-- The repository is organized by analysis stage, so each top-level directory represents one major part of the pipeline.
-- Additional usage examples, input requirements, software dependencies, and expected outputs can be added to this README as the documentation is expanded.

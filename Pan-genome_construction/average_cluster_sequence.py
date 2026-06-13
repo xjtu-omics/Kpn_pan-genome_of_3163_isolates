@@ -7,7 +7,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
-msa_dir = "./both-align-results-strict-adv/aligned_gene_sequences/"          # 包含 .fasta 和 .fas 的目录
+msa_dir = "./both-align-results-strict-adv/aligned_gene_sequences/"          # Directory containing .fasta and .fas files
 out_fasta = "./both-align-results-strict-adv/pan_genome_represent.fa"
 
 records_out = []
@@ -17,11 +17,11 @@ n_msa = 0
 for fname in sorted(os.listdir(msa_dir)):
     path = os.path.join(msa_dir, fname)
 
-    # ---------- 情况 1：单序列 ----------
+    # ---------- Case 1: single sequence ----------
     if fname.endswith(".fasta"):
         records = list(SeqIO.parse(path, "fasta"))
         if len(records) != 1:
-            continue  # 异常文件，直接跳过
+            continue  # Invalid file; skip it directly
 
         rec = records[0]
         rec.id = os.path.splitext(fname)[0]
@@ -29,7 +29,7 @@ for fname in sorted(os.listdir(msa_dir)):
         records_out.append(rec)
         n_single += 1
 
-    # ---------- 情况 2：MSA ----------
+    # ---------- Case 2: MSA ----------
     elif fname.endswith(".fas"):
         try:
             alignment = AlignIO.read(path, "fasta")
@@ -63,7 +63,7 @@ for fname in sorted(os.listdir(msa_dir)):
         n_msa += 1
 
 
-# ---------- 写出 ----------
+# ---------- Write output ----------
 SeqIO.write(records_out, out_fasta, "fasta")
 
 print(f"[INFO] single-sequence fasta files: {n_single}")

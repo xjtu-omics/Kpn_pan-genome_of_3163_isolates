@@ -1,5 +1,5 @@
-###最终确定的、用于计算结果的代码文件
-#计算每个药最终采用的K_med和对应的特征集合
+###Final code file used to compute the results
+#Compute the final K_med and corresponding feature set for each antibiotic
 import pandas as pd
 import json
 import list2fm as lf
@@ -10,15 +10,15 @@ import numpy as np
 os.environ["PYTHONHASHSEED"] = "0"
 os.environ["OMP_NUM_THREADS"] = "1"
 
-# 读RS耐药表型数据
+# Read R/S resistance phenotype data
 phenos=pd.read_csv("./Panaroo-DownStream-both/phenotypes.csv",index_col=0)
 
-# 读取抗生素名
+# Read antibiotic names
 #med_list=phenos.columns.tolist()
 med_list=['TZP']
 K_list=[35]
 
-# 读统计检验过滤结果
+# Read statistical-test filtering results
 chi_kw_path="./Panaroo-DownStream-both/statistics-test/"
 with open(chi_kw_path+'chi_and_kw_core.json', 'r', encoding='utf-8') as file:
     chi_and_kw_core = json.load(file)
@@ -38,50 +38,50 @@ if __name__=='__main__':
         print(med)
 
         os.makedirs(f"{root_save_path}result/{med}/", exist_ok=True)
-        
-        # auc结果list
+
+        # AUC result list
         auc_array=[]
-        # 循环前初始化feature_num
+        # Initialize feature_num before the loop
         last_total_and_fn=0
-        # feature_num数组
+        # feature_num array
         feature_num=[]
-        # feature_num对应的threshold
+        # Thresholds corresponding to feature_num
         fn_thresh=[]
 
-        ### 读当前药物对应的core、dis的trian数据集和test数据集
+        ### Read the core and dispensable train and test datasets for the current antibiotic
         whole_fm_path=f"{root_read_path}ml_sort/{med}/"
         train_core_fm=pd.read_csv(whole_fm_path+'core_train_set.csv',index_col=0)
-        train_dis_fm=pd.read_csv(whole_fm_path+'dis_train_set.csv',index_col=0) 
+        train_dis_fm=pd.read_csv(whole_fm_path+'dis_train_set.csv',index_col=0)
         test_core_fm=pd.read_csv(whole_fm_path+'core_test_set.csv',index_col=0)
-        test_dis_fm=pd.read_csv(whole_fm_path+'dis_test_set.csv',index_col=0)       
+        test_dis_fm=pd.read_csv(whole_fm_path+'dis_test_set.csv',index_col=0)
 
         for threshold in list(step_size):
 
-            ### 联用统计检验结果和机器学习排序结果，过滤特征，得到特征名构成的list
-            # ml筛选请注意：排序结果只保留了有权值的特征。请判断threshold与总特征数的大小关系。
+            ### Combine statistical-test results with machine-learning rankings to filter features and obtain a feature-name list
+            # ML filtering note: ranking results only retain weighted features. Check the relationship between the threshold and the total feature count.
             ml_core_list=lf.process_ml_sort(med,'core',threshold)
             ml_dis_list=lf.process_ml_sort(med,'dis',threshold)
             filted_core_list=list(set(ml_core_list) & set(chi_and_kw_core[med]))
             filted_dis_list=list(set(ml_dis_list) & set(chi_and_kw_dis[med]))
             filted_total_list=filted_core_list+filted_dis_list
-            
-            ### 特征名list + 原始特征矩阵，抽取特征，拼装新特征矩阵
-            # 注意，build_fm函数返回的特征矩阵带标签列
-            # 拼装train矩阵
+
+            ### Use the feature-name list and original feature matrix to extract features and assemble a new feature matrix
+            # Note: build_fm returns a feature matrix with the label column
+            # Assemble the train matrix
             selected_train_core_fm=lf.build_fm(filted_core_list,train_core_fm)
             selected_train_dispensable_fm=lf.build_fm(filted_dis_list,train_dis_fm)
-            selected_train_total_fm = pd.concat([selected_train_core_fm, selected_train_dispensable_fm], axis=1) # 合并
-            selected_train_total_fm = selected_train_total_fm.loc[:, ~selected_train_total_fm.columns.duplicated()] # 去重列
-            # 拼装test矩阵
+            selected_train_total_fm = pd.concat([selected_train_core_fm, selected_train_dispensable_fm], axis=1) # Merge
+            selected_train_total_fm = selected_train_total_fm.loc[:, ~selected_train_total_fm.columns.duplicated()] # Deduplicate columns
+            # Assemble the test matrix
             selected_test_core_fm=lf.build_fm(filted_core_list,test_core_fm)
             selected_test_dispensable_fm=lf.build_fm(filted_dis_list,test_dis_fm)
-            selected_test_total_fm = pd.concat([selected_test_core_fm, selected_test_dispensable_fm], axis=1) # 合并
-            selected_test_total_fm = selected_test_total_fm.loc[:, ~selected_test_total_fm.columns.duplicated()] # 去重列
+            selected_test_total_fm = pd.concat([selected_test_core_fm, selected_test_dispensable_fm], axis=1) # Merge
+            selected_test_total_fm = selected_test_total_fm.loc[:, ~selected_test_total_fm.columns.duplicated()] # Deduplicate columns
 
-            ### 五折交叉验证
-            # 同时符合两个条件时才进行训练：特征矩阵非空（特征集非空）、特征集相比上一次计算时扩张
-            # 训练完成后，给每个结果list和对应的fn_list添加新值
-            # 最后更新last_fn
+            ### Five-fold cross-validation
+            # Train only when both conditions are met: the feature matrix is not empty and the feature set has expanded compared with the previous run
+            # After training, append new values to each result list and the corresponding fn_list
+            # Update last_fn at the end
             if selected_train_total_fm.shape[1] > 1 and len(filted_total_list) > last_total_and_fn:
                 total_auc=en.train_ensemble_with_cv(selected_train_total_fm,selected_test_total_fm,med)
                 auc_array.append(total_auc)
@@ -91,33 +91,33 @@ if __name__=='__main__':
 
         if len(auc_array)==0:
             print(f"No valid feature set found for {med}. Skipping.")
-            continue   
-        ### 找到auc_array中最大的auc值，记录到一个字典中
-        max_value = max(auc_array)  # 找到最大值
-        max_index = auc_array.index(max_value)  # 找到最大值的第一个出现的索引
+            continue
+        ### Find the maximum AUC value in auc_array and record it in a dictionary
+        max_value = max(auc_array)  # Find the maximum value
+        max_index = auc_array.index(max_value)  # Find the index of the first occurrence of the maximum value
 
-        ### 画图
-        # 创建画布
+        ### Plot
+        # Create the canvas
         fig, ax = plt.subplots(figsize=(10, 6))
 
-        # 1. 绘制折线
+        # 1. Draw the line plot
         ax.plot(feature_num, auc_array, markersize=8)
-        # ※设置整数刻度，需要根据具体情况调整
+        # Set integer ticks; adjust as needed for the specific case
         numpy_feature_num = np.array(feature_num)
         x_min, x_max = int(np.floor(numpy_feature_num.min())), int(np.ceil(numpy_feature_num.max()))
-        plt.xticks(np.arange(x_min, x_max + 5, 5)) 
+        plt.xticks(np.arange(x_min, x_max + 5, 5))
 
-        # 2. 标注点并添加虚线
-        # 标记点
-        ax.scatter(feature_num[max_index], max_value, color='red', s=100, zorder=5)        
-        # 添加虚线：x轴垂直线和y轴水平线
+        # 2. Annotate the point and add dashed lines
+        # Mark the point
+        ax.scatter(feature_num[max_index], max_value, color='red', s=100, zorder=5)
+        # Add dashed lines: a vertical x-axis line and a horizontal y-axis line
         ax.axvline(x=feature_num[max_index], color='gray', linestyle='--', alpha=0.5)
-        ax.axhline(y=max_value, color='gray', linestyle='--', alpha=0.5)        
-        # 在坐标轴上标注数值
-        ax.text(feature_num[max_index], ax.get_ylim()[0]-0.004, f'x={feature_num[max_index]}', ha='center', va='top', color='blue')  # x轴标注
-        ax.text(ax.get_xlim()[0]-1,max_value+0.005, f'y={max_value:.4f}', ha='right', va='center', color='green')  # y轴标注
+        ax.axhline(y=max_value, color='gray', linestyle='--', alpha=0.5)
+        # Annotate values on the axes
+        ax.text(feature_num[max_index], ax.get_ylim()[0]-0.004, f'x={feature_num[max_index]}', ha='center', va='top', color='blue')  # x-axis annotation
+        ax.text(ax.get_xlim()[0]-1,max_value+0.005, f'y={max_value:.4f}', ha='right', va='center', color='green')  # y-axis annotation
 
-        # 3. 美化图表
+        # 3. Polish the plot
         ax.set_xlabel('feature number')
         ax.set_ylabel('roc_auc value')
         ax.set_title('best cut-off point')
@@ -126,16 +126,16 @@ if __name__=='__main__':
         plt.savefig(f'{root_save_path}result/{med}/bestkey.png')
         fig.clear()
 
-        # 打印所有最大点对应的特征set
-        # 每个最大值都要输出
-        # 所有的归到一个文件里
+        # Print the feature sets corresponding to all maxima
+        # Output every maximum value
+        # Write all results to one file
         ml_core_list=lf.process_ml_sort(med,'core',fn_thresh[max_index])
         ml_dis_list=lf.process_ml_sort(med,'dis',fn_thresh[max_index])
         feature_list=list(set(ml_core_list) & set(chi_and_kw_core[med])) + list(set(ml_dis_list) & set(chi_and_kw_dis[med]))
         with open(f'{root_save_path}result/{med}/feature_select_result.txt', 'w') as f:
 
             f.write("\n")
-            f.write(f"roc_auc：{max_value}\n") # 对应的auc           
+            f.write(f"roc_auc：{max_value}\n") # Corresponding AUC
             rank_path=f"{root_read_path}ml_sort/"
             xgb_core_rank=pd.read_csv(f'{rank_path}{med}/core_xgb_importance.csv')
             lr_core_rank=pd.read_csv(f'{rank_path}{med}/core_lr_importance.csv')
@@ -158,7 +158,7 @@ if __name__=='__main__':
             for i in feature_list:
                 print(i)
                 if '->' in i:
-                    #核心基因特征
+                    #Core-gene features
                     chi_pvalue=core_chi.at[i,med]
                     kw_pvalue=core_kw.at[i,med]
                     xgb_weight=xgb_core_rank.loc[xgb_core_rank['Feature'] == i, 'Importance'].values[0]
@@ -171,7 +171,7 @@ if __name__=='__main__':
                         lr_rank=int(((lr_core_rank.index[lr_core_rank['Feature'] == i]).to_list())[0])+1
                     else:
                         lr_rank=-1
-                    rf_weight=rf_core_rank.loc[rf_core_rank['Feature'] == i, 'Importance'].values[0] # 取过-log
+                    rf_weight=rf_core_rank.loc[rf_core_rank['Feature'] == i, 'Importance'].values[0] # Already transformed with -log
                     if not pd.isna(rf_weight):
                         rf_rank=int(((rf_core_rank.index[rf_core_rank['Feature'] == i]).to_list())[0])+1
                     else:
@@ -182,7 +182,7 @@ if __name__=='__main__':
                     else:
                         svm_rank=-1
                 else:
-                    #非核心基因特征
+                    #Dispensable-gene features
                     chi_pvalue=dis_chi.at[i,med]
                     kw_pvalue=dis_kw.at[i,med]
                     xgb_weight=xgb_dis_rank.loc[xgb_dis_rank['Feature'] == i, 'Importance'].values[0]
@@ -195,7 +195,7 @@ if __name__=='__main__':
                         lr_rank=int(((lr_dis_rank.index[lr_dis_rank['Feature'] == i]).to_list())[0])+1
                     else:
                         lr_rank=-1
-                    rf_weight=rf_dis_rank.loc[rf_dis_rank['Feature'] == i, 'Importance'].values[0] # 取过-log
+                    rf_weight=rf_dis_rank.loc[rf_dis_rank['Feature'] == i, 'Importance'].values[0] # Already transformed with -log
                     if not pd.isna(rf_weight):
                         rf_rank=int(((rf_dis_rank.index[rf_dis_rank['Feature'] == i]).to_list())[0])+1
                     else:
@@ -207,25 +207,25 @@ if __name__=='__main__':
                         svm_rank=-1
 
                 f.write(f"{i},chi_pvalue={chi_pvalue},kw_pvalue={kw_pvalue},xgb_rank={xgb_rank},lr_rank={lr_rank},rf_rank={rf_rank},svm_rank={svm_rank}\n")
-        
-        ### 对于最终的最优特征集，再次调用en.train_ensemble_with_cv，并保存模型、相关参数和roc曲线图
-        ## 先组装最终的训练集的特征矩阵
+
+        ### For the final optimal feature set, call en.train_ensemble_with_cv again and save the model, related parameters, and ROC curve
+        ## First assemble the final training feature matrix
         final_core_list=list(set(ml_core_list) & set(chi_and_kw_core[med]))
         final_dis_list=list(set(ml_dis_list) & set(chi_and_kw_dis[med]))
-        # 组装train矩阵
+        # Assemble the train matrix
         final_train_core_fm=train_core_fm[final_core_list + ['label']]
         final_train_dis_fm=train_dis_fm[final_dis_list + ['label']]
-        final_train_fm = pd.concat([final_train_core_fm, final_train_dis_fm], axis=1) # 合并
-        final_train_fm = final_train_fm.loc[:, ~final_train_fm.columns.duplicated()] # 去重列
-        # 组装test矩阵
+        final_train_fm = pd.concat([final_train_core_fm, final_train_dis_fm], axis=1) # Merge
+        final_train_fm = final_train_fm.loc[:, ~final_train_fm.columns.duplicated()] # Deduplicate columns
+        # Assemble the test matrix
         final_test_core_fm=test_core_fm[final_core_list + ['label']]
         final_test_dis_fm=test_dis_fm[final_dis_list + ['label']]
-        final_test_fm = pd.concat([final_test_core_fm, final_test_dis_fm], axis=1) # 合并
-        final_test_fm = final_test_fm.loc[:, ~final_test_fm.columns.duplicated()] # 去重列
-        # 调函数
+        final_test_fm = pd.concat([final_test_core_fm, final_test_dis_fm], axis=1) # Merge
+        final_test_fm = final_test_fm.loc[:, ~final_test_fm.columns.duplicated()] # Deduplicate columns
+        # Call the function
         final_auc=en.train_ensemble_with_cv(final_train_fm,final_test_fm,med,model_save=True)
         print(f"Final AUC for {med} with K_med={K_med}: {final_auc}")
-        # 保存train和test矩阵
+        # Save the train and test matrices
         final_train_core_fm.to_csv(f"{root_save_path}core_train_matrix/{med}.csv")
         final_train_dis_fm.to_csv(f"{root_save_path}dis_train_matrix/{med}.csv")
         final_test_core_fm.to_csv(f"{root_save_path}core_test_matrix/{med}.csv")

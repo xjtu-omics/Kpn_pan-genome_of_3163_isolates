@@ -5,12 +5,12 @@ from collections import Counter
 from Bio import SeqIO
 
 def get_mode_length(lengths):
-    """计算众数长度"""
+    """Compute the modal length"""
     counter = Counter(lengths)
     return counter.most_common(1)[0][0]
 
 def clean_msa(msa_file, output_file):
-    """去掉异常序列并写入新文件"""
+    """Remove outlier sequences and write a new file"""
     records = list(SeqIO.parse(msa_file, "fasta"))
     if not records:
         return 0, 0
@@ -23,7 +23,7 @@ def clean_msa(msa_file, output_file):
 
     cleaned_records = [r for r in records if lower <= len(r.seq) <= upper]
 
-    # 写回 fasta 文件，保持格式
+    # Write back to the FASTA file while preserving format
     SeqIO.write(cleaned_records, output_file, "fasta")
 
     removed = len(records) - len(cleaned_records)
@@ -44,6 +44,6 @@ def main(msa_dir, output_dir):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print(f"用法: {sys.argv[0]} <msa_dir> <output_dir>")
+        print(f"Usage: {sys.argv[0]} <msa_dir> <output_dir>")
         sys.exit(1)
     main(sys.argv[1], sys.argv[2])

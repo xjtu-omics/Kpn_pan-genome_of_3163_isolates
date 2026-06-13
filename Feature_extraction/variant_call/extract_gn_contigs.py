@@ -14,16 +14,16 @@ def process_msa(msa_file, output_dir, nomatch_dir):
             break
 
     base_name = os.path.basename(msa_file).replace(".aln.fas", "")
-    
+
     if found:
-        # 写出 fasta 文件
+        # Write the output FASTA file
         os.makedirs(output_dir, exist_ok=True)
         out_file = os.path.join(output_dir, base_name + ".fa")
-        # header 使用原 contig 名
+        # Use the original contig name in the header
         SeqIO.write([found], out_file, "fasta")
         return True
     else:
-        # 移动整个 MSA 文件到 nomatch 文件夹
+        # Move the entire MSA file to the nomatch folder
         os.makedirs(nomatch_dir, exist_ok=True)
         shutil.move(msa_file, os.path.join(nomatch_dir, os.path.basename(msa_file)))
         return False
@@ -41,6 +41,6 @@ def main(msa_dir, output_dir, nomatch_dir):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print(f"用法: {sys.argv[0]} <msa_dir> <output_contigs_dir> <no_match_dir>")
+        print(f"Usage: {sys.argv[0]} <msa_dir> <output_contigs_dir> <no_match_dir>")
         sys.exit(1)
     main(sys.argv[1], sys.argv[2], sys.argv[3])

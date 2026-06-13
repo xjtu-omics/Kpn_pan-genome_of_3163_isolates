@@ -124,7 +124,7 @@ def extract_numeric_part(text: str) -> Optional[int]:
     """
     if not text:
         return None
-    m = re.search(r"(\d+)(?!.*\d)", str(text))
+    m = re.search(r"(\d+)(total!.*\d)", str(text))
     if not m:
         return None
     try:

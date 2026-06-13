@@ -7,7 +7,7 @@ def list_files(directory):
 print("start reading dict")
 amr_dict_path = "./amr_panaroo_dict.json"
 with open(amr_dict_path, 'r', encoding='utf-8') as file:
-    # 读取 JSON 文件并转换为字典
+    # Read the JSON file and convert it to a dictionary
     data = json.load(file)
 amr_keys = data.keys()
 
@@ -65,4 +65,4 @@ for i in data:
         print("dis")
 
 print(core_count,dis_count,rare_count)
-#296个构成：22个core，187个dis，22个rare，剩下的invalid。总数为296。
+#Composition of 296 items: 22 core, 187 dispensable, 22 rare, and the remaining invalid. Total: 296.

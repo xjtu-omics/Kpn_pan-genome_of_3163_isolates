@@ -4,7 +4,7 @@ import numpy as np
 
 mpl.rcParams['font.family'] = 'Arial'
 
-# 原始变异数据
+# Raw variant data
 data = {
     'upstream_gene_variant': 2034,
     'intergenic_region': 1895,
@@ -30,12 +30,12 @@ values = [data[key] for key in data]
 plt.figure(figsize=(10, 7))
 bars = plt.bar(categories, values, color='gray')
 
-# 旋转横轴标签 45 度
+# Rotate x-axis labels by 45 degrees
 plt.xticks(rotation=45, ha='right', fontsize=11)
 
-# 在柱子顶部显示原始数值（而不是对数值）
+# Show raw values above the bars instead of log values
 for i, bar in enumerate(bars):
-    plt.text(bar.get_x() + bar.get_width()/2, bar.get_height(), 
+    plt.text(bar.get_x() + bar.get_width()/2, bar.get_height(),
              f'{values[i]:,}', ha='center', va='bottom', fontsize=10)
 
 plt.title("")

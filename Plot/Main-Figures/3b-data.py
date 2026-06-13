@@ -2,15 +2,15 @@ import pandas as pd
 
 target_col = 'Medical class'
 
-# ============ 你需要自己实现的函数 ============
+# ============ Function you need to implement yourself ============
 def is_known_gene(gene_name: str, feature_type) -> bool:
     """
-    判断一个基因是否为已知基因。    
+    Determine whether a gene is known.
     Args:
-        gene_name: 基因名称
-        
+        gene_name: Gene name
+
     Returns:
-        True 表示已知基因，False 表示未知基因。
+        True means known gene; False means unknown gene.
     """
     if gene_name.startswith("amr_") and feature_type == 'g-feature':
         return True
@@ -24,39 +24,39 @@ def is_known_gene(gene_name: str, feature_type) -> bool:
 
 if __name__ == "__main__":
 
-    # 读取CSV文件
+    # Read the CSV file
     csv_path = r"./Figures-re/fig3部分相关数据/ab-candidate_features_summary.csv"
-    
+
     df = pd.read_csv(csv_path)
-    
-    # 显示数据统计结果
+
+    # Display data statistics
     print("=" * 80)
-    print(f"总行数: {len(df)}")
-    print(f"\n{target_col} 的类别及统计:\n")
-    
-    # 按Medical class分组统计
+    print(f"Total rows: {len(df)}")
+    print(f"\n{target_col} categories and statistics:\n")
+
+    # Group statistics by Medical class
     for medical_class in df[target_col].unique():
 
         class_df = df[df[target_col] == medical_class]
         print(f"\n{'='*60}")
-        print(f"类别: {medical_class} (共 {len(class_df)} 行)")
+        print(f"Category: {medical_class} (total {len(class_df)} rows)")
         print(f"{'='*60}")
 
         known_v=[]
         unknown_v=[]
         known_g=[]
         unknown_g=[]
-        
-        # 分别统计 v-feature 和 g-feature
+
+        # Count v-feature and g-feature separately
         for feature_type in ['v-feature', 'g-feature']:
 
             type_df = class_df[class_df['Feature type'] == feature_type]
-            
+
             if len(type_df) == 0:
                 continue
-                
+
             print(f"\n  {feature_type}:")
-            
+
             for index,row in type_df.iterrows():
                 gene = row['Gene']
                 variant = row['Variant']
@@ -71,7 +71,7 @@ if __name__ == "__main__":
                         unknown_v.append(complete_feature)
                     elif feature_type == 'g-feature' and gene not in unknown_g:
                         unknown_g.append(gene)
-            
-            print(f"    已知基因: {len(known_v) if feature_type == 'v-feature' else len(known_g)}")
-            print(f"    未知基因: {len(unknown_v) if feature_type == 'v-feature' else len(unknown_g)}")
-            print(f"    小计: {len(known_v) + len(unknown_v) if feature_type == 'v-feature' else len(known_g) + len(unknown_g)}")
+
+            print(f"    Known genes: {len(known_v) if feature_type == 'v-feature' else len(known_g)}")
+            print(f"    Unknown genes: {len(unknown_v) if feature_type == 'v-feature' else len(unknown_g)}")
+            print(f"    Subtotal: {len(known_v) + len(unknown_v) if feature_type == 'v-feature' else len(known_g) + len(unknown_g)}")

@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-# 读耐药表型
+# Read resistance phenotypes
 pheno_csvpath="./Panaroo-DownStream-both/phenotypes.csv"
 phenos=pd.read_csv(pheno_csvpath,index_col=0)
 GN_list=phenos.index.tolist()

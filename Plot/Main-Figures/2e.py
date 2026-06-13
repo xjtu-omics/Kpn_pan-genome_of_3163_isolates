@@ -4,7 +4,7 @@ import matplotlib as mpl
 
 mpl.rcParams['font.family'] = 'Arial'
 
-# 1. 整理数据
+# 1. Prepare data
 data = {
     'Category': ['SNP', 'Insertion', 'Deletion'],
     'Shared': [279061, 316, 266],
@@ -13,23 +13,23 @@ data = {
 }
 df = pd.DataFrame(data).set_index('Category')
 
-# 2. 创建画布：1行2列，宽度比例 1:2 (左边SNP，右边两个Indel)
+# 2. Create the canvas: 1 row and 2 columns with width ratio 1:2; SNP on the left and two Indel panels on the right
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.5, 6), gridspec_kw={'width_ratios': [1, 2]})
-colors = ['#464555', '#aba9bc', '#d89b99'] # 共有, GN, GC
+colors = ['#464555', '#aba9bc', '#d89b99'] # Shared, GN, GC
 
-# 绘制左侧：SNP (大刻度)
+# Draw the left panel: SNP with large ticks
 df.loc[['SNP']].plot(kind='bar', stacked=True, ax=ax1, color=colors, legend=False, width=0.4)
 ax1.set_title('SNP Count', fontsize=12)
 ax1.set_ylabel('Number of Variants')
 ax1.set_xticklabels(['SNP'], rotation=0)
 
-# 绘制右侧：Insertion & Deletion (小刻度)
+# Draw the right panel: Insertion and Deletion with small ticks
 df.loc[['Insertion', 'Deletion']].plot(kind='bar', stacked=True, ax=ax2, color=colors, width=0.4)
 ax2.set_title('Indel Counts', fontsize=12)
 ax2.set_xticklabels(['Insertion', 'Deletion'], rotation=0)
 ax2.legend(title="Type", loc='upper left')
 
-# 在柱子顶部添加总数标签
+# Add total-count labels above the bars
 for ax, cats in zip([ax1, ax2], [['SNP'], ['Insertion', 'Deletion']]):
     for i, cat in enumerate(cats):
         total = df.loc[cat].sum()

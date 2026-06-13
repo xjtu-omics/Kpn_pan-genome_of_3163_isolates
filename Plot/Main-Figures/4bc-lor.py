@@ -3,28 +3,28 @@ import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = ['Arial']
 
-# 数据
+# Data
 data = np.array([
     [1768, 7],
     [119, 7]
 ])
 
-# 创建图（宽 > 高，做成扁一点的长方形）
-fig, ax = plt.subplots(figsize=(8, 3))   # <<< 扁长比例在这里调
+# Create the figure with width greater than height for a flatter rectangle
+fig, ax = plt.subplots(figsize=(8, 3))   # <<< Adjust the wide aspect ratio here
 
 ax.axis('off')
 
-# 创建表格
+# Create the table
 table = ax.table(
     cellText=data,
     cellLoc='center',
     loc='center'
 )
 
-# 调整单元格大小
-table.scale(2.1, 2.5)   # <<< 第一个是宽度缩放，第二个是高度缩放
+# Adjust cell size
+table.scale(2.1, 2.5)   # <<< The first value scales width and the second scales height
 
-# 美化样式
+# Polish the style
 for (row, col), cell in table.get_celld().items():
     cell.set_edgecolor('black')
     cell.set_linewidth(2)
@@ -32,7 +32,7 @@ for (row, col), cell in table.get_celld().items():
 
 plt.tight_layout()
 
-# 如果要保存 PDF：
+# To save as PDF:
 save_path = "./Figures-re\\fig5"
 plt.savefig(save_path + "\\5d-ompA-NIT-LorData.pdf", format="pdf", bbox_inches="tight")
 

@@ -2,62 +2,62 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-# 全局字体设置
+# Global font settings
 mpl.rcParams.update({
-    'font.family': 'Arial',            # 强制使用 Arial
-    'axes.unicode_minus': False,       # 解决负号乱码
+    'font.family': 'Arial',            # Force Arial
+    'axes.unicode_minus': False,       # Fix garbled minus signs
     'pdf.fonttype': 42, 'ps.fonttype': 42
 })
 
-# 读取数据
+# Read data
 path = "./Figures-re/fig4部分相关数据/a-candidates_distribution.xlsx"
 df = pd.read_excel(path, sheet_name='med', index_col=0)
 
-# 选择两列（这里假设选择前两列，你可以根据需要修改）
-selected_columns = df.columns[0:2]  # 修改这里选择你需要的列
+# Select two columns; this assumes the first two columns and can be modified as needed
+selected_columns = df.columns[0:2]  # Modify this to select the columns you need
 df_selected = df[selected_columns]
 
-# 手动指定每行的颜色列表（根据你的需求指定颜色）
+# Manually specify the color list for each row as needed
 row_colors = ['#377EB8', '#377EB8', '#377EB8', '#377EB8', '#B23648', '#B23648', '#B23648', '#DC7369', '#DC7369',
               '#D8EBCD', '#D8EBCD', '#D8EBCD', '#F8EFB5', '#DAD4B9', '#DAD4B9', '#C8CDCF', '#E1F3FA']
 #row_colors = ['#377EB8', '#B23648', '#DC7369', '#D8EBCD', '#F8EFB5', '#DAD4B9', '#C8CDCF', '#E1F3FA']
 
-# 设置花纹样式
-hatch_styles = ['', '/']  # 一些常见的花纹
+# Set hatch styles
+hatch_styles = ['', '/']  # Some common hatch patterns
 
-# 单独生成两个图例句柄
+# Generate two legend handles separately
 legend_elements = [
     plt.Rectangle((0,0),1,1, facecolor='white', edgecolor='black', hatch='/', label='unknown'),
     plt.Rectangle((0,0),1,1, facecolor='white', edgecolor='black', hatch='', label='known')
 ]
 
-# 画图
+# Plot
 fig, ax = plt.subplots(figsize=(4, 6.3))
 bottom = [0] * len(df_selected)
-y_pos = range(len(df_selected))  # y轴位置
+y_pos = range(len(df_selected))  # y-axis position
 
-# 堆叠绘图
+# Stacked plotting
 for idx, drug_class in enumerate(df_selected.columns):
     ax.barh(
         y=y_pos,
         width=df_selected[drug_class],
         left=bottom,
         height=0.8,
-        color=row_colors,  # 每行使用指定颜色
-        hatch=hatch_styles[idx % len(hatch_styles)],  # 根据列索引循环设置花纹
-        edgecolor='black'  # 添加边框颜色
+        color=row_colors,  # Use specified colors for each row
+        hatch=hatch_styles[idx % len(hatch_styles)],  # Cycle hatch patterns by column index
+        edgecolor='black'  # Add edge color
     )
     bottom = [i + j for i, j in zip(bottom, df_selected[drug_class])]
 
-# 设置y轴标签
+# Set y-axis labels
 ax.set_yticks(y_pos)
 ax.set_yticklabels(df_selected.index)
 
-# 关键调整：设置上下边距为半个柱子高度
+# Key adjustment: set top and bottom margins to half a bar height
 ax.set_ylim(-0.65, len(df_selected) - 0.35)
 
-# 创建自定义图例，仅显示花纹样式
-# 单独生成两个图例句柄
+# Create a custom legend showing hatch styles only
+# Generate two legend handles separately
 legend_elements = [
     plt.Rectangle((0,0),1,1, facecolor='white', edgecolor='black', hatch='', label='known'),
     plt.Rectangle((0,0),1,1, facecolor='white', edgecolor='black', hatch='/', label='unknown')
@@ -65,7 +65,7 @@ legend_elements = [
 
 #ax.legend(handles=legend_elements, loc='upper right')
 
-# 标签与图例
+# Labels and legend
 ax.set_xlabel("selected candidates")
 ax.set_title("v-features distribution")
 

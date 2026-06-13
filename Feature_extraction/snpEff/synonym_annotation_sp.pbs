@@ -9,7 +9,7 @@ cd ./snpEff/
 list_file="empty_files.txt"
 
 while IFS= read -r file; do
-    # 如果文件不存在，直接跳过
+    # If the file does not exist, skip it directly
     [[ -f "$file" ]] || continue
 
     gene=$(basename "$file" .ann.vcf)

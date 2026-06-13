@@ -3,7 +3,7 @@ import matplotlib as mpl
 
 mpl.rcParams['font.family'] = 'Arial'
 
-# 原始变异数据
+# Raw variant data
 data = {
     'synonymous_variant': 439892,
     'missense_variant': 211767,
@@ -25,24 +25,24 @@ data = {
     'frameshift_variant&stop_lost&splice_region_variant': 1
 }
 
-# 分类统计
+# Category statistics
 synonymous = data.get('synonymous_variant', 0)
 missense = data.get('missense_variant', 0)
-other = sum(count for k, count in data.items() 
+other = sum(count for k, count in data.items()
             if k != 'synonymous_variant' and k != 'missense_variant')
 
-# 准备画图数据
+# Prepare plotting data
 labels = ['Synonymous', 'Missense', 'Other']
 sizes = [synonymous, missense, other]
 colors = ['#b4d7e5', '#bedeab',  '#A8A6D3']
-print(sizes) # 输出为[439892, 211767, 8848]
+print(sizes) # Output is[439892, 211767, 8848]
 
-# 画饼图
+# Draw the pie chart
 plt.figure(figsize=(8, 8))
 plt.pie(
     sizes, labels=None, autopct=None,
     colors=colors, startangle=140)
 
 plt.title('Variant Classification Pie Chart', fontsize=16)
-plt.axis('equal')  # 保证饼图是圆的
+plt.axis('equal')  # Ensure the pie chart is circular
 plt.show()

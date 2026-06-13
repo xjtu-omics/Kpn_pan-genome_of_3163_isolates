@@ -103,8 +103,8 @@ def train_ensemble_with_cv(labeled_train_data, labeled_test_data, med, random_st
     # =========================
     # 5. Collect results
     # =========================
-    best_model = search.best_estimator_ # 如果model_save为True，则在后续保存该模型
-    best_params = search.best_params_ # search到的超参，以字典格式储存，键值和param_grid一一对应
+    best_model = search.best_estimator_ # If model_save is True, save this model later
+    best_params = search.best_params_ # Hyperparameters found by search, stored as a dictionary with keys matching param_grid
     best_cv_auc = search.best_score_
     cv_results = pd.DataFrame(search.cv_results_)
     print(best_params)
@@ -117,7 +117,7 @@ def train_ensemble_with_cv(labeled_train_data, labeled_test_data, med, random_st
     X_test = X_test.sort_index(axis=1)
     y_test = labeled_test_data["label"]
     # ---------------------------
-    # 6.1. 用选择好的超参定义新模型
+    # 6.1. Define a new model using the selected hyperparameters
     # ---------------------------
     lr = make_pipeline(
         StandardScaler(),
@@ -169,80 +169,80 @@ def train_ensemble_with_cv(labeled_train_data, labeled_test_data, med, random_st
             ('xgb', xgb)
         ],
         voting='soft',
-        weights=best_params['weights'],  # 投票权重
+        weights=best_params['weights'],  # Voting weights
         n_jobs=-1
     )
 
     # ---------------------------
-    # 6.2. 在新数据上预测概率
+    # 6.2. Predict probabilities on new data
     # ---------------------------
     ensemble.fit(X_train, y_train)
     y_prob = ensemble.predict_proba(X_test)[:, 1]
 
     # ---------------------------
-    # 6.3. 计算 AUC
+    # 6.3. Compute AUC
     # ---------------------------
     auc_on_test = roc_auc_score(y_test, y_prob)
 
     # ---------------------------
-    # 6.4. 绘制roc-auc曲线图，并把在test集上的各指标写出到文件
+    # 6.4. Plot the ROC-AUC curve and write test-set metrics to file
     # ---------------------------
     if model_save:
-        # 1.保存在整个train上fit过的模型
+        # 1.Save the model fitted on the full train set
         model_path = save_path + 'best_model.pkl'
         joblib.dump(ensemble, model_path)
-        # 2.把超参调优结果best_params写出到文件
+        # 2.Write the tuned hyperparameters best_params to file
         with open(save_path + 'best_params.json', 'w') as f:
             json.dump(best_params, f, indent=4)
-        # 3. 画roc-auc曲线并保存
+        # 3. Plot and save the ROC-AUC curve
         rf.fit(X_train, y_train)
         lr.fit(X_train, y_train)
         svm.fit(X_train, y_train)
         xgb.fit(X_train, y_train)
-        # 计算每个模型的 ROC 曲线
+        # Compute the ROC curve for each model
         fpr_rf, tpr_rf, _ = roc_curve(y_test, rf.predict_proba(X_test)[:, 1])
         fpr_lr, tpr_lr, _ = roc_curve(y_test, lr.predict_proba(X_test)[:, 1])
         fpr_svm, tpr_svm, _ = roc_curve(y_test, svm.predict_proba(X_test)[:, 1])
         fpr_xgb, tpr_xgb, _ = roc_curve(y_test, xgb.predict_proba(X_test)[:, 1])
         fpr_voting, tpr_voting, _ = roc_curve(y_test, ensemble.predict_proba(X_test)[:, 1])
-        # 计算 AUC 值
+        # Compute the AUC value
         roc_auc_rf = auc(fpr_rf, tpr_rf)
         roc_auc_lr = auc(fpr_lr, tpr_lr)
         roc_auc_svm = auc(fpr_svm, tpr_svm)
         roc_auc_xgb = auc(fpr_xgb, tpr_xgb)
         roc_auc_voting = auc(fpr_voting, tpr_voting)
-        # 绘制 ROC 曲线
+        # Plot the ROC curve
         plt.figure(figsize=(10, 8))
-        # 绘制每个基模型的 ROC 曲线
+        # Plot the ROC curve for each base model
         plt.plot(fpr_rf, tpr_rf, color='darkorange', lw=2, label='Random Forest (AUC = %0.2f)' % roc_auc_rf)
         plt.plot(fpr_lr, tpr_lr, color='blue', lw=2, label='Logistic Regression (AUC = %0.2f)' % roc_auc_lr)
         plt.plot(fpr_svm, tpr_svm, color='green', lw=2, label='SVM (AUC = %0.2f)' % roc_auc_svm)
         plt.plot(fpr_xgb, tpr_xgb, color='red', lw=2, label='XGBoost (AUC = %0.2f)' % roc_auc_xgb)
-        # 绘制集成模型的 ROC 曲线
+        # Plot the ROC curve for the ensemble model
         plt.plot(fpr_voting, tpr_voting, color='purple', lw=2, label='Voting Classifier (AUC = %0.2f)' % roc_auc_voting)
-        # 绘制随机猜测的基准线
+        # Plot the random-guess baseline
         plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-        # 添加标题和标签
+        # Add title and labels
         plt.title('ROC Curve of Five Models')
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
         plt.legend(loc='lower right')
-        # 保存图像
+        # Save the image
         plt.savefig(f"{save_path}roc_auc_5models.pdf")
         plt.clf()
-        # 再画一张只有集成模型的roc曲线图
-        # 绘制 ROC 曲线
+        # Draw another ROC plot containing only the ensemble model
+        # Plot the ROC curve
         plt.figure(figsize=(10, 8))
-        # 绘制集成模型的 ROC 曲线
+        # Plot the ROC curve for the ensemble model
         plt.plot(fpr_voting, tpr_voting, color='purple', lw=2, label='Voting Classifier (AUC = %0.2f)' % roc_auc_voting)
-        # 绘制随机猜测的基准线
+        # Plot the random-guess baseline
         plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-        # 添加标题和标签
+        # Add title and labels
         plt.title('ROC Curve of Ensemble Model')
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
         plt.legend(loc='lower right')
-        # 保存图像
+        # Save the image
         plt.savefig(f"{save_path}roc_auc_ensemble.pdf")
 
     return auc_on_test

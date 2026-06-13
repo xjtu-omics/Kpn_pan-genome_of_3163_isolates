@@ -6,7 +6,7 @@ gml_file = "./both-align-results-strict-adv/final_graph.gml"
 out_file = "./both-align-results-strict-adv/cluster_centroid_summary.tsv"
 
 '''
-# 读取 GML（networkx 是按需加载节点属性的，不会一次性 print）
+# Read GML; networkx loads node attributes lazily and will not print everything at once
 G = nx.read_gml(gml_file)
 
 with open(out_file, "w") as f:
@@ -18,7 +18,7 @@ with open(out_file, "w") as f:
         long_centroid = data.get("longCentroidID", "NA")
         centroid = data.get("centroid", "NA")
 
-        # 处理 centroid 是 list / set 的情况
+        # Handle cases where centroid is a list or set
         if isinstance(centroid, (list, set, tuple)):
             centroid = ";".join(map(str, centroid))
 
@@ -30,8 +30,8 @@ out_fasta = "./both-align-results-strict-adv/complete_pan_genome_reference.fasta
 tsv_file = out_file
 
 # --------------------------------------------------
-# 1. 读取 clusters.tsv
-#    提取：cluster_name -> clustering_id
+# 1. Read clusters.tsv
+#    Extract: cluster_name -> clustering_id
 # --------------------------------------------------
 cluster_to_cid = {}
 
@@ -43,23 +43,23 @@ with open(tsv_file) as f:
         long_centroid_raw = fields[1].strip()
 
         try:
-            # 把字符串 "[300, '0_1_9']" 解析成 Python list
+            # Parse the string "[300, '0_1_9']" into a Python list
             parsed = ast.literal_eval(long_centroid_raw)
 
-            # 约定：第二个元素是真正的 clustering_id
+            # Convention: the second element is the real clustering_id
             cid = str(parsed[1]).strip()
 
             cluster_to_cid[cluster] = cid
 
         except Exception as e:
-            # 如果解析失败，直接跳过（也可以 raise）
+            # If parsing fails, skip directly; raising is also possible
             continue
 
 print(f"[INFO] clusters parsed: {len(cluster_to_cid)}")
 
 # --------------------------------------------------
-# 2. 读取 sequences.csv
-#    建立：clustering_id -> dna_sequence
+# 2. Read sequences.csv
+#    Build: clustering_id -> dna_sequence
 # --------------------------------------------------
 seq_dict = {}
 
@@ -69,14 +69,14 @@ with open(csv_file) as f:
         cid = row["clustering_id"].strip()
         dna = row["dna_sequence"].strip()
 
-        # 如果一个 clustering_id 出现多次，这里保留第一次
+        # If a clustering_id appears multiple times, keep the first occurrence here
         if cid not in seq_dict:
             seq_dict[cid] = dna
 
 print(f"[INFO] unique clustering_id in CSV: {len(seq_dict)}")
 
 # --------------------------------------------------
-# 3. 写 FASTA：每个 cluster 一条序列
+# 3. Write FASTA: one sequence per cluster
 # --------------------------------------------------
 written = 0
 with open(out_fasta, "w") as out:

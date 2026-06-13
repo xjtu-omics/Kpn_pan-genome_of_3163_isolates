@@ -64,16 +64,16 @@ def ens_soft(labeled_data, med):
     details = pd.DataFrame()
     details['true label'] = y
 
-    cv = KFold(n_splits=5, shuffle=True, random_state=42)  # 五折交叉验证
+    cv = KFold(n_splits=5, shuffle=True, random_state=42)  # Five-fold cross-validation
 
-    # average roc_auc准备
+    # Prepare average ROC-AUC
     fpr_dict = {}
     tpr_dict = {}
 
     for model_name, model in models.items():
         print(f"Evaluating {model_name}...")
 
-        # 交叉验证指标
+        # Cross-validation metrics
         cv_results = cross_validate(model, X, y, cv=cv, scoring=scoring, n_jobs=-1)
         y_pred = cross_val_predict(model, X, y, cv=cv, n_jobs=-1)
         y_pred_probs = cross_val_predict(model, X, y, cv=cv, method='predict_proba', n_jobs=-1)
@@ -104,7 +104,7 @@ def ens_soft(labeled_data, med):
         print("Confusion Matrix:")
         print(cm)
 
-        # === 平均 ROC 计算 ===
+        # === Mean ROC calculation ===
         mean_fpr = np.linspace(0, 1, 100)
         tprs = []
         aucs = []
@@ -123,7 +123,7 @@ def ens_soft(labeled_data, med):
 
         fpr_dict[model_name] = mean_fpr
         tpr_dict[model_name] = mean_tpr
-        results.at[model_name, 'mean_auc'] = mean_auc   # 保存平均AUC
+        results.at[model_name, 'mean_auc'] = mean_auc   # Save the mean AUC
 
     results.to_csv(f"{save_path}metrices_train_final.csv")
     details.to_csv(f"{save_path}prob_train_final.csv")
@@ -157,12 +157,12 @@ def ens_soft(labeled_data, med):
     plt.tight_layout()
     plt.savefig(f"{save_path}roc_auc_ens_train_final.pdf")
 
-    # 训练并保存最终模型（.pkl）
+    # Train and save the final model (.pkl)
     print("\nTraining final soft voting model on full data...")
     final_model = voting_model.fit(X, y)
     joblib.dump(final_model, f"{save_path}model_train_final.pkl")
 
-    # 最终返回用于衡量特征集优劣的平均auc
+    # Return the mean AUC used to evaluate the feature set
     auc4cmp = results.at['Soft Voting', 'auc_list']
     average = sum(auc4cmp) / len(auc4cmp)
     return average
@@ -173,7 +173,7 @@ if __name__=='__main__':
 
     for root, dirs, files in os.walk(folder_path):
 
-        #files=['ETP.csv']  # 只跑ETP
+        #files=['ETP.csv']  # Run ETP only
 
         for file in files:
 
@@ -183,6 +183,6 @@ if __name__=='__main__':
                 total_fm = pd.read_csv(full_path, index_col=0)
                 med = (file.split('.'))[0]
 
-                ### 五折交叉验证
-                # 调完函数就ok
+                ### Five-fold cross-validation
+                # Calling the function is enough
                 total_auc=ens_soft(total_fm,med)

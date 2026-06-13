@@ -16,33 +16,33 @@ import joblib
 
 def model_test(med, labeled_data):
 
-    # 导入训练时用的特征矩阵（原始训练数据或列名）
-    train_df = pd.read_csv(f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_train_matrix/{med}.csv", index_col=0)  # 训练时的特征矩阵
+    # Import the feature matrix used during training (original training data or column names)
+    train_df = pd.read_csv(f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_train_matrix/{med}.csv", index_col=0)  # Feature matrix used during training
     train_df = train_df.sort_index(axis=1)
-    model_features = list(train_df.columns)  # 按训练时的列顺序保存
+    model_features = list(train_df.columns)  # Keep the column order used during training
 
-    # 导入训练好的模型
+    # Import the trained model
     model = joblib.load(f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/{med}/model_train_final.pkl")
 
-    # 预测
+    # Predict
     X = labeled_data[model_features]
     X = X.drop(columns=["label"])
-    y_true = labeled_data["label"]  # 真实标签列
+    y_true = labeled_data["label"]  # True label column
     y_pred = model.predict(X)
 
-    # 计算混淆矩阵
+    # Compute the confusion matrix
     cm = confusion_matrix(y_true, y_pred)
-    print("混淆矩阵:")
+    print("Confusion matrix:")
     print(cm)
 
-    # 有些指标需要概率
+    # Some metrics require probabilities
     if hasattr(model, "predict_proba"):
         y_proba = model.predict_proba(X)[:, 1]
     else:
-        # 对于不支持 predict_proba 的模型（比如部分 SVM），用 decision_function
+        # For models that do not support predict_proba, such as some SVMs, use decision_function
         y_proba = model.decision_function(X)
 
-    # 计算指标并存成字典
+    # Compute metrics and store them in a dictionary
     metrics_dict = {}
     if y_true is not None and len(set(y_true)) > 1:
         metrics_dict = {
@@ -64,18 +64,18 @@ def model_test(med, labeled_data):
             "Recall": recall_score(y_true, y_pred, average="weighted"),
         }
     else:
-        print("没有标签列，无法计算指标。")
+        print("No label column; metrics cannot be computed.")
 
     return metrics_dict
 
 if __name__ == "__main__":
 
-    # 获取药物列表
+    # Get the antibiotic list
     feature_folder_path="./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result/"
     folder_list = [f for f in os.listdir(feature_folder_path)]
-    #folder_list = ['ETP'] # 只跑NIT
+    #folder_list = ['ETP'] # Run NIT only
 
-    # 拿test对应的特征矩阵来训练
+    # Use the feature matrix corresponding to the test set for training
     for med in folder_list:
         print(med)
         df=pd.read_csv(f"./Panaroo-DownStream-patric/feature_set_determine/5f_avgauc_train/result_test_matrix/{med}.csv", index_col=0)

@@ -29,8 +29,8 @@ fm_path="./Panaroo-DownStream-both/final_core_feature_matrix.csv"
 fm=pd.read_csv(fm_path,index_col=0)
 variants=fm.columns.tolist()
 df=pd.DataFrame(columns=med_class,index=variants)
-for index,value in df.iterrows(): #遍历每一个变异
-    for column,item in value.items(): #遍历每一个药
+for index,value in df.iterrows(): #Iterate over each variant
+    for column,item in value.items(): #Iterate over each antibiotic
         pheno_list=pheno[column]
         feature_list=fm[index]
         R0,R1,S0,S1=cal_chi(pheno_list,feature_list)

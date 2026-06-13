@@ -15,7 +15,7 @@ def extract_unique_ids(msa_file):
     return unique_ids
 
 def classify_msa(msa_file, output_dir):
-    """根据 unique ID 数量分类 MSA 文件"""
+    """Classify MSA files by the number of unique IDs"""
     unique_ids = extract_unique_ids(msa_file)
     n_unique = len(unique_ids)
 
@@ -50,6 +50,6 @@ def main(msa_dir, output_dir):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print(f"用法: {sys.argv[0]} <cleaned_msa_dir> <classified_output_dir>")
+        print(f"Usage: {sys.argv[0]} <cleaned_msa_dir> <classified_output_dir>")
         sys.exit(1)
     main(sys.argv[1], sys.argv[2])

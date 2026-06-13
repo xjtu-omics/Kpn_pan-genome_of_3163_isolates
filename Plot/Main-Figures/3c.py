@@ -8,17 +8,17 @@ mpl.rcParams['font.family'] = 'Arial'
 
 def plot_metrics(data):
 
-    # 准备数据
+    # Prepare data
     keys = list(data.keys())
     means = [np.mean(data[k]) for k in keys]
     print(means)
-    stds = [np.std(data[k], ddof=1) for k in keys]  # 样本标准差
+    stds = [np.std(data[k], ddof=1) for k in keys]  # Sample standard deviation
 
     colors = [
         # CZO, FOX, CXM, CAZ
         '#377EB8', '#377EB8', '#377EB8', '#377EB8',
         # ETP, IPM, MEM
-        '#B23648', '#B23648', '#B23648', 
+        '#B23648', '#B23648', '#B23648',
         # SAM, TZP
         '#DC7369', '#DC7369',
         # GEN, AMK, TOB
@@ -30,41 +30,41 @@ def plot_metrics(data):
         # NIT
         '#C8CDCF',
         # SXT
-        '#E1F3FA'         
+        '#E1F3FA'
     ]
 
-    # 横坐标索引
+    # x-axis indices
     x = np.arange(len(keys))
 
-    # 创建图
+    # Create the plot
     plt.figure(figsize=(12, 6))
 
-    # 绘制柱状图
+    # Draw the bar plot
     plt.bar(x, means, yerr=stds, capsize=5, color=colors)
 
-    # 设置坐标轴
+    # Set axes
     plt.xticks(x, keys)
     plt.xlabel('Antibiotics', fontsize=14)
     plt.ylabel('roc-auc', fontsize=14)
     plt.title('Test', fontsize=16)
 
-    # 修改外围框线厚度
+    # Modify the outer spine width
     plt.gca().spines['top'].set_linewidth(1.3)
     plt.gca().spines['right'].set_linewidth(1.3)
     plt.gca().spines['bottom'].set_linewidth(1.3)
     plt.gca().spines['left'].set_linewidth(1.3)
 
-    # 在y=0.8位置添加一条灰色虚线
+    # Add a gray dashed line at y=0.8
     plt.axhline(y=0.8, color='gray', linestyle='--')
 
-    # 强制设置y轴的上界为1
+    # Force the y-axis upper bound to 1
     plt.ylim(bottom=0, top=1)
 
-    # 调整布局
+    # Adjust layout
     plt.tight_layout()
 
-    # 显示图
-    # ②这改文件名，含指标种类和数据集种类
+    # Show the plot
+    # 2) Change the file name here to include the metric type and dataset type
     plt.savefig("./Figures-re/fig4/4b-test.pdf")
 
 

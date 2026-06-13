@@ -1,4 +1,4 @@
-# 对指定的若干种药物，取特征集（top/full）的并集，然后从FASTA文件中提取对应的序列，输出新的FASTA文件
+# For specified antibiotics, take the union of feature sets (top/full), extract the corresponding sequences from a FASTA file, and output a new FASTA file
 from __future__ import annotations
 
 import argparse

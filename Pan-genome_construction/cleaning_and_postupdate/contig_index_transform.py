@@ -153,7 +153,7 @@ def build_mapping_db(
 
             if len(batch) >= batch_size:
                 conn.executemany(
-                    "INSERT OR IGNORE INTO mapping(full_key, annotation_id) VALUES (?, ?)",
+                    "INSERT OR IGNORE INTO mapping(full_key, annotation_id) VALUES (total, total)",
                     batch,
                 )
                 conn.commit()
@@ -163,7 +163,7 @@ def build_mapping_db(
 
         if batch:
             conn.executemany(
-                "INSERT OR IGNORE INTO mapping(full_key, annotation_id) VALUES (?, ?)",
+                "INSERT OR IGNORE INTO mapping(full_key, annotation_id) VALUES (total, total)",
                 batch,
             )
             conn.commit()
@@ -195,7 +195,7 @@ def make_lookup_function(conn, cache_size=500000):
     @lru_cache(maxsize=cache_size)
     def query_db(full_key):
         cur = conn.execute(
-            "SELECT annotation_id FROM mapping WHERE full_key = ? LIMIT 1",
+            "SELECT annotation_id FROM mapping WHERE full_key = total LIMIT 1",
             (full_key,),
         )
         row = cur.fetchone()

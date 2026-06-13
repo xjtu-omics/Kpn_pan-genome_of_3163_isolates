@@ -9,52 +9,52 @@ source ~/.bashrc
 conda activate RGI
 cd ./
 
-# 设置变量
-GFF_DIR="./both-align-results-strict-adv/postpanaroo_gffs/"  # GFF 文件所在目录
-OUTPUT_BASE_DIR="./both-align-results-strict-adv/postpanaroo_fas/"  # 输出目录
-THREADS=32  # Python 脚本使用的线程数
+# Set variables
+GFF_DIR="./both-align-results-strict-adv/postpanaroo_gffs/"  # Directory containing GFF files
+OUTPUT_BASE_DIR="./both-align-results-strict-adv/postpanaroo_fas/"  # Output directory
+THREADS=32  # Number of threads used by the Python script
 
-# 创建必要的目录
+# Create required directories
 mkdir -p "$OUTPUT_BASE_DIR"
 
-# 检查是否有 GFF 文件
+# Check whether GFF files exist
 gff_files=$(find "$GFF_DIR" -maxdepth 1 -name "*.gff" -o -name "*.gff3" | head)
 if [ -z "$gff_files" ]; then
-    echo "错误：在目录 $GFF_DIR 中未找到 .gff 或 .gff3 文件"
+    echo "ERROR: no .gff or .gff3 files found in directory $GFF_DIR "
     exit 1
 fi
 
-echo "找到以下 GFF 文件："
+echo "Found the following GFF files:"
 find "$GFF_DIR" -maxdepth 1 -name "*.gff" -o -name "*.gff3" | while read file; do
     echo "  $(basename "$file")"
 done
 echo ""
 
-# 处理每个 GFF 文件
+# Process each GFF file
 total_files=0
 processed_files=0
 failed_files=0
 
-# 统计文件总数
+# Count total files
 total_files=$(find "$GFF_DIR" -maxdepth 1 \( -name "*.gff" -o -name "*.gff3" \) | wc -l)
 
-echo "开始处理 $total_files 个文件..."
+echo "Start processing $total_files files..."
 echo "=========================================="
 
 for gff_file in "$GFF_DIR"/*.gff "$GFF_DIR"/*.gff3; do
-    # 跳过不存在的文件（当没有匹配时会展开为字面值）
+    # Skip nonexistent files; when no match exists, the pattern expands to a literal value
     [ -f "$gff_file" ] || continue
 
-    # 获取基础文件名（不带路径和扩展名）
+    # Get the base file name without path or extension
     base_name=$(basename "$gff_file")
     file_stem="${base_name%.*}"
-    
-    echo "处理文件: $base_name"
+
+    echo "Processing file: $base_name"
     echo "------------------------------------------"
-    
-    # 步骤1: 用 Python 提取 CDS、rRNA、tRNA 序列并生成 FASTA
+
+    # Step 1: use Python to extract CDS, rRNA, and tRNA sequences and generate FASTA
     output_fasta="$OUTPUT_BASE_DIR/${file_stem}_cds_rna.fasta"
-    
+
     python3 << EOF
 import sys
 
@@ -68,7 +68,7 @@ with open(gff_file) as f:
     lines = f.readlines()
 
 # -------------------------
-# 1️⃣ 解析 FASTA 部分
+# 1️⃣ Parse the FASTA section
 # -------------------------
 in_fasta = False
 seq_id = None
@@ -83,7 +83,7 @@ for line in lines:
         if line.startswith(">"):
             if seq_id:
                 genome[seq_id] = "".join(seq_lines)
-            # 关键：只取 header 第一列
+            # Key point: only take the first header column
             seq_id = line.strip()[1:].split()[0]
             seq_lines = []
         else:
@@ -93,11 +93,11 @@ if seq_id:
     genome[seq_id] = "".join(seq_lines)
 
 if len(genome) == 0:
-    print("ERROR: 未解析到 genome 序列")
+    print("ERROR: No genome sequences parsed")
     sys.exit(1)
 
 # -------------------------
-# 2️⃣ 解析 feature
+# 2️⃣ Parse features
 # -------------------------
 for line in lines:
     if line.startswith("#"):
@@ -130,11 +130,11 @@ for line in lines:
     features.append((contig, start, end, strand, gene_id))
 
 if len(features) == 0:
-    print("ERROR: 未找到任何 feature")
+    print("ERROR: No features found")
     sys.exit(1)
 
 # -------------------------
-# 3️⃣ 写 FASTA
+# 3️⃣ Write FASTA
 # -------------------------
 written = 0
 
@@ -156,43 +156,43 @@ with open(out_fasta, "w") as out:
 print("Features written:", written)
 
 if written == 0:
-    print("ERROR: 输出为 0 条序列")
+    print("ERROR: Output contains zero sequences")
     sys.exit(1)
 EOF
 
-    # 检查是否生成了 FASTA 文件
+    # Check whether the FASTA file was generated
     if [ -s "$output_fasta" ]; then
         seq_count=$(grep -c "^>" "$output_fasta")
-        echo "   成功提取 $seq_count 条序列到 $output_fasta"
+        echo "   Successfully extracted $seq_count sequences to $output_fasta"
     else
-        echo "   错误：未能生成有效的 FASTA 文件"
+        echo "   ERROR: failed to generate a valid FASTA file"
         ((failed_files++))
         continue
     fi
 
-    # 步骤2: 运行 RGI 分析
+    # Step 2: run RGI analysis
     output_dir="./both-align-results-strict-adv/rgi_results/${file_stem}"
     mkdir -p "$output_dir"
 
-    echo "2. 运行 RGI main 分析..."
+    echo "2. Run RGI main analysis..."
     if rgi main -i "$output_fasta" -o "$output_dir/rgi_output" -t contig -n "$THREADS" --clean; then
-        echo "   ✓ RGI 分析完成"
+        echo "   ✓ RGI analysis complete"
         ((processed_files++))
     else
-        echo "   ✗ RGI 分析失败"
+        echo "   ✗ RGI analysis failed"
         ((failed_files++))
         error_log="$output_dir/error.log"
-        echo "RGI 分析失败: $base_name" > "$error_log"
-        echo "时间: $(date)" >> "$error_log"
+        echo "RGI analysis failed: $base_name" > "$error_log"
+        echo "Time: $(date)" >> "$error_log"
     fi
-    
+
     echo ""
 done
 
 echo "=========================================="
-echo "处理完成！"
-echo "总计: $total_files 个文件"
-echo "成功: $processed_files 个"
-echo "失败: $failed_files 个"
+echo "Processing complete!"
+echo "Total: $total_files files"
+echo "Successful: $processed_files"
+echo "Failed: $failed_files"
 echo "=========================================="
-echo "结果保存在: $OUTPUT_BASE_DIR/"
+echo "Results saved in: $OUTPUT_BASE_DIR/"

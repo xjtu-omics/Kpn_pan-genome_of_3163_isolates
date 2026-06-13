@@ -1,6 +1,6 @@
-# 找卡方检验和k-w检验同时具有显著性的（特征，药物）对
-# 数据存储：初步拟定为字典，key为特征，value为药物list
-# 大概思路：同时遍历chi和kw的结果文件，每次读两个df（同一基因），找到既在chi中显著又在kw中显著的特征-药物对，存入字典
+# Find feature-antibiotic pairs significant in both chi-square and K-W tests
+# Data storage: tentatively use a dictionary with features as keys and antibiotic lists as values
+# General approach: iterate through chi and KW result files together, read two dataframes for the same gene each time, find feature-antibiotic pairs significant in both chi and KW, and store them in a dictionary
 import pandas as pd
 import numpy as np
 import json
@@ -20,7 +20,7 @@ def select_significance(df_chi,df_kw,gene):
         for column,value in row.items():
             if index in df_kw.index and column in df_kw.columns:
                 if not np.isnan(df_kw.at[index,column]):
-                    # 取chi和k-w交集/并集
+                    # Take the intersection/union of chi and K-W results
                     if value < 0.05 and df_kw.at[index,column] < 0.05:
                         print(gene+index)
                         result_dict[column].append(gene+index)

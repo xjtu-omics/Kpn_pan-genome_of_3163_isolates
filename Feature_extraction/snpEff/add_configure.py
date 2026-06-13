@@ -2,17 +2,17 @@ import os
 
 def get_file_names_without_extension(folder_path):
     file_names = []
-    # 遍历文件夹下的所有文件
+    # Iterate over all files in the folder
     for root, dirs, files in os.walk(folder_path):
         for file in files:
-            # 分离文件名和后缀
+            # Separate file name and extension
             name, _ = os.path.splitext(file)
             file_names.append(name)
     return file_names
 
 if __name__=='__main__':
     folder_path = "./both-align-results-strict-adv/core_gene_references/"
-    file_names = get_file_names_without_extension(folder_path) # 获取不带后缀的文件名列表（所有基因名列表）
+    file_names = get_file_names_without_extension(folder_path) # Get the list of file names without extensions (all gene names)
     print(len(file_names))
 
     snp_configure_path="./snpEff/snpEff.config"

@@ -2,14 +2,14 @@ from Bio import SeqIO
 import os
 import re
 
-# 输入和输出文件夹路径
-input_folder = "./both-align-results-strict-adv/aligned_gene_sequences/"   # 改成你的原始msa fasta文件夹路径
-output_folder = "./both-align-results-strict-adv/gene_sequences/" # 改成你想保存结果的文件夹路径
+# Input and output folder paths
+input_folder = "./both-align-results-strict-adv/aligned_gene_sequences/"   # Change this to the folder path for your original MSA FASTA files
+output_folder = "./both-align-results-strict-adv/gene_sequences/" # Change this to the folder path where you want to save results
 
-# 如果输出文件夹不存在就创建
+# Create the output folder if it does not exist
 os.makedirs(output_folder, exist_ok=True)
 
-# 遍历文件夹下所有 fasta 文件
+# Iterate over all FASTA files under the folder
 for filename in os.listdir(input_folder):
     if filename.endswith(".fasta") or filename.endswith(".fas"):
         input_path = os.path.join(input_folder, filename)
@@ -17,9 +17,9 @@ for filename in os.listdir(input_folder):
 
         with open(output_path, "w") as out_handle:
             for record in SeqIO.parse(input_path, "fasta"):
-                # 只保留 A, T, C, G
+                # Keep only A, T, C, and G
                 clean_seq = re.sub(r"[^ATCGatcg]", "", str(record.seq))
                 record.seq = clean_seq
                 SeqIO.write(record, out_handle, "fasta")
 
-print("所有 fasta 文件处理完成，结果保存在:", output_folder)
+print("All FASTA files processed; results saved in:", output_folder)

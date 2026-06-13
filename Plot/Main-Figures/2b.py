@@ -8,7 +8,7 @@ INPUT_FILE = "./figures-new/fig2-中间文件/anhui_sample_gene_counts.txt"
 OUTPUT_FILE = "gene_count_trapezoid_plot.pdf"
 
 def read_data(filename):
-    # 返回字典，key为样本名，value为N50值
+    # Return a dictionary with sample names as keys and N50 values as values
     with open(filename, 'r') as f:
         lines = f.readlines()
     data = {}
@@ -22,7 +22,7 @@ def read_data(filename):
 data1 = read_data("./figures-new/fig2-中间文件/anhui_contig_n50_1174.txt")
 data2 = read_data("./figures-new/fig2-中间文件/anhui_contig_n50_491.txt")
 
-# 读取并排序
+# Read and sort
 data = []
 with open(INPUT_FILE) as f:
     for line in f:
@@ -43,7 +43,7 @@ with open(INPUT_FILE) as f:
 
 data_sorted = sorted(data, key=lambda x: x[3], reverse=True)
 
-# 提取排序后数据
+# Extract sorted data
 gene_count_1174 = [x[1] for x in data_sorted if x[2]=='Pure short-read']
 gene_count_491 = [x[1] for x in data_sorted if x[2]=='Hybrid long+short-read']
 print(len(gene_count_1174), len(gene_count_491))
@@ -51,34 +51,34 @@ print(len(gene_count_1174), len(gene_count_491))
 import seaborn as sns
 import pandas as pd
 df = pd.DataFrame({
-    'Value': gene_count_1174 + gene_count_491,  # 合并两个列表数据
-    'List': ['Pure short-read'] * len(gene_count_1174) + ['Hybrid long+short-read'] * len(gene_count_491)  # 标记数据来源
+    'Value': gene_count_1174 + gene_count_491,  # Merge data from the two lists
+    'List': ['Pure short-read'] * len(gene_count_1174) + ['Hybrid long+short-read'] * len(gene_count_491)  # Mark the data source
 })
 
-# 计算 Wilcoxon rank-sum (Mann-Whitney U) 检验的 p-value
+# Compute the p-value of the Wilcoxon rank-sum (Mann-Whitney U) test
 u_stat, p_value = stats.mannwhitneyu(gene_count_491, gene_count_1174, alternative='greater')
 print(f'Mann-Whitney U Statistic: {u_stat}')
 print(f'Wilcoxon rank-sum test p-value: {p_value}')
 
-# 创建图形
+# Create the figure
 plt.figure(figsize=(4, 6))
 
-# 使用seaborn绘制箱线图
-sns.boxplot(x='List', 
-            y='Value', 
+# Use seaborn to draw the boxplot
+sns.boxplot(x='List',
+            y='Value',
             data=df,
             palette=["#91CAE8", "#F48892"],
-            width=0.4,  # 设置箱体宽度
-            flierprops=dict(marker='o', color='r', markersize=5, markeredgewidth=1))  # 设置散点样式
+            width=0.4,  # Set box width
+            flierprops=dict(marker='o', color='r', markersize=5, markeredgewidth=1))  # Set scatter-point style
 
-# 设置纵轴的上限
-plt.ylim(4500, 7500) 
+# Set the y-axis upper limit
+plt.ylim(4500, 7500)
 
-# 设置标题和标签
+# Set title and labels
 plt.title('Gene Numbers from Two Assembly Methods', fontsize=12)
 plt.xlabel('Assembly Method', fontsize=10)
 plt.ylabel('Gene Number', fontsize=10)
 
-# 显示图形
+# Show the figure
 plt.tight_layout()
 plt.show()

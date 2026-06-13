@@ -1,22 +1,22 @@
 import pandas as pd
 import numpy as np
 
-# === 读取数据 ===
+# === Read data ===
 fpath="./Figures-re\\fig5相关数据\\5a-group_258.csv"
 features = pd.read_csv(fpath, index_col=0)
 ppath="./Figures-re\\fig5相关数据\\supplement\\phenotypes_3163.csv"
 phenotypes = pd.read_csv(ppath, index_col=0)
 
-# === 设置目标基因（你要画哪一个）===
-target_gene = '534_C->G'  # ← 改成你要分析的那个基因名
-selected_antibiotics = ['SXT']  # ← 手动挑选
+# === Set the target gene to plot===
+target_gene = '534_C->G'  # ← Change this to the gene name you want to analyze
+selected_antibiotics = ['SXT']  # ← Select manually
 
-# === 计算每种抗生素的 log2 odds ratio ===
+# === Compute the log2 odds ratio for each antibiotic ===
 results = []
-for i in range(0,1,1): #抗生素个数
+for i in range(0,1,1): #Number of antibiotics
     abx=selected_antibiotics[i]
     if abx not in phenotypes.columns:
-        print(f"[警告] 抗生素 {abx} 不在 phenotypes.csv 中，跳过")
+        print(f"[Warning] Antibiotic {abx} is not in phenotypes.csv; skipping")
         continue
 
     df = features[[target_gene]].join(phenotypes[[abx]])
@@ -34,7 +34,7 @@ for i in range(0,1,1): #抗生素个数
     c = 7
     d = 119
 
-    # 加1平滑
+    # Add-one smoothing
     a += 0.5
     b += 0.5
     c += 0.5

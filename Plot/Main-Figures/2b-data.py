@@ -10,7 +10,7 @@ def count_genes_in_gff(gff_file):
             if len(parts) < 3:
                 continue
             feature_type = parts[2]
-            # 这里统计CDS数量，按需可修改
+            # Count CDS entries here; modify as needed
             if feature_type == "CDS":
                 count += 1
     return count
@@ -24,18 +24,18 @@ def main(input_dir, output_file):
             count = count_genes_in_gff(filepath)
             gene_counts.append((sample_id, count))
 
-    # 按基因数倒序排序
+    # Sort by gene count in descending order
     gene_counts.sort(key=lambda x: x[1], reverse=True)
 
-    # 写入输出文件
+    # Write the output file
     with open(output_file, 'w') as out_f:
         for sample_id, count in gene_counts:
             out_f.write(f"{sample_id} {count}\n")
 
-    print(f"统计完成，结果写入 {output_file}")
+    print(f"Counting complete; results written to {output_file}")
 
 if __name__ == "__main__":
-    # 你可以修改下面的路径
-    input_directory = "./GFFs/"  # GFF文件所在目录
+    # You can modify the path below
+    input_directory = "./GFFs/"  # Directory containing GFF files
     output_txt = "./sample_gene_counts.txt"
     main(input_directory, output_txt)

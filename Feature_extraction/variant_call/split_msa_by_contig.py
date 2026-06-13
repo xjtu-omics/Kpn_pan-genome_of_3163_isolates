@@ -4,7 +4,7 @@ import sys
 from Bio import SeqIO
 
 def safe_filename(name):
-    """把 contig 名里的 ';' 替换成 '-'，其他字符保持不变"""
+    """Replace ';' in contig names with '-' and leave other characters unchanged"""
     return name.replace(";", "-")
 
 def split_msa(msa_dir, output_dir):
@@ -29,6 +29,6 @@ def split_msa(msa_dir, output_dir):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print(f"用法: {sys.argv[0]} <msa_dir> <output_dir>")
+        print(f"Usage: {sys.argv[0]} <msa_dir> <output_dir>")
         sys.exit(1)
     split_msa(sys.argv[1], sys.argv[2])
