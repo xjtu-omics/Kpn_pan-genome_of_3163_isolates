@@ -1,37 +1,108 @@
-(1) Train set
-    ↓
-    5-fold CV
-    ↓
-    Select the model / hyperparameters
+Candidate determination and model-training scripts
+=================================================
 
-(2) Refit the best model on the full train set
+This folder contains scripts for selecting final candidate feature sets,
+training soft-voting ensemble models, saving final feature matrices and models,
+and evaluating them on test and validation data.
 
-(3) Independent test set
-    ↓
-    Single prediction
-    ↓
-    Single AUC + ROC
+General usage
+-------------
 
-ensemble_avg.py:
-Ensemble model training function
-Saved files: 1) metrics dataframe, 2) predicted probabilities and labels for each sample, 3) ROC-AUC curve, 4) trained model (.pkl format)
-All files saved directly by soft_ensemble must be called and saved explicitly at the end; otherwise, the final output will correspond to the last K value in the loop.
-(Here, five-fold cross-validation is performed on 30% of the samples)
+Most scripts use fixed relative paths and antibiotic lists. Check the path
+variables and med_list/K_list values before running.
 
-list2fm.py:
-Function for assembling a feature matrix from a feature-name list
+Typical workflow
+----------------
+
+1. Use find_Kmed_avg.py to scan feature-ranking cutoffs and choose the best
+   cutoff K for each antibiotic.
+2. Use selected_fm.py to assemble selected feature matrices from the chosen
+   feature lists.
+3. Use model_save.py to train and save the final soft-voting model.
+4. Use test.py and validation.py to evaluate saved models on independent test
+   and validation matrices.
+
+Scripts
+-------
+
+list2fm.py
+    Purpose:
+        Helper functions for feature selection. process_ml_sort() keeps
+        features that appear in at least two of four model-ranking lists within
+        the cutoff threshold. build_fm() extracts selected feature columns plus
+        the label column from a feature matrix.
+    Usage:
+        Imported by find_Kmed_avg.py and selected_fm.py; normally not run
+        directly.
+
+ensemble_avg.py
+    Purpose:
+        Train a soft-voting ensemble using logistic regression, random forest,
+        SVM, and XGBoost. Hyperparameters and ensemble weights are selected by
+        randomized search with 5-fold stratified cross-validation. The selected
+        model is then evaluated on the test set.
+    Outputs:
+        Metrics tables, prediction probabilities/labels, ROC-AUC curves, and
+        optionally trained model files.
+    Usage:
+        Imported by find_Kmed_avg.py or other training scripts through
+        train_ensemble_with_cv().
 
 find_Kmed_avg.py
-This code file should be run twice.
-First run: set the interval for all 35 antibiotics to 100, inspect the K-AUC trend, and determine the interval where the maximum should be selected, assuming AUC reaches 0.8.
-Second run: find the maximum within the selected interval.
-Saved files: 1) feature list and maximum AUC value, 2) K-AUC curve
+    Purpose:
+        Determine the best feature cutoff K for each antibiotic by combining
+        statistical-test results and ML rankings, training the ensemble model
+        over a series of thresholds, and selecting the threshold with the best
+        ROC-AUC.
+    Main inputs:
+        ./Panaroo-DownStream-both/statistics-test/chi_and_kw_core.json
+        ./Panaroo-DownStream-both/statistics-test/chi_and_kw_dispensable.json
+        ./Panaroo-DownStream-both/ml_sort/<antibiotic>/
+    Main outputs:
+        ./Panaroo-DownStream-both/feature_set_determine/5f_avgauc_train/result/<antibiotic>/
+    Usage:
+        Edit med_list and K_list. In practice this script may be run twice:
+        first with a broad interval to inspect K-AUC trends, then with a
+        narrower interval around the best region.
 
-selected_fm.py:
-Based on the selected features, output the feature matrix corresponding to each antibiotic significant feature set
+            python find_Kmed_avg.py
 
-model_save.py:
-Use a specific feature matrix as input and output the trained model and corresponding metrics
+selected_fm.py
+    Purpose:
+        Assemble selected feature matrices for each antibiotic from the final
+        feature lists in feature_select_result.txt.
+    Main output:
+        Selected train/test matrices under the configured result matrix folder.
+    Usage:
+        Edit dataset and path variables as needed, then run:
 
-test.py：
-Evaluate the model trained on 70% of the samples using the 30% test set
+            python selected_fm.py
+
+model_save.py
+    Purpose:
+        Train the final model on a selected feature matrix and save the model
+        plus training metrics and ROC outputs.
+    Usage:
+        Edit input matrix paths and output paths as needed, then run:
+
+            python model_save.py
+
+test.py
+    Purpose:
+        Load saved final models and evaluate them on test-set feature matrices.
+        Metrics include F1, MCC, AUC, accuracy, precision, and recall.
+    Usage:
+        Check the train/test matrix roots and model paths, then run:
+
+            python test.py
+
+validation.py
+    Purpose:
+        Build validation feature matrices using each saved model's feature
+        order, predict on validation samples, and append validation AUC values
+        to auc.txt.
+    Usage:
+        Check model_root, fm_root, validation output folders, and metric output
+        folder, then run:
+
+            python validation.py

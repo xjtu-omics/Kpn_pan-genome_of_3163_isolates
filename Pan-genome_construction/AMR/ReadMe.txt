@@ -1,0 +1,85 @@
+AMR annotation scripts
+======================
+
+This folder contains scripts for annotating pan-genome representative
+sequences against antimicrobial-resistance databases and mapping AMR hits back
+to Panaroo gene-cluster names.
+
+General usage
+-------------
+
+Most scripts use fixed relative paths. Check the paths near the top of each
+script before running.
+
+Scripts
+-------
+
+AMR_annotate_fasta.pbs
+    Purpose:
+        Run ABRicate against NCBI, CARD, and ResFinder databases on the
+        pan-genome representative FASTA.
+    Main input:
+        ./both-align-results-strict-adv/pan_genome_reference_longCentroidID.fa
+    Main outputs:
+        ./AMR_annotation/both_ncbi_results_longCentroidID.tab
+        ./AMR_annotation/both_card_results_longCentroidID.tab
+        ./AMR_annotation/both_resfinder_results_longCentroidID.tab
+    Usage:
+        Activate the AMR_ann environment and submit:
+
+            qsub AMR_annotate_fasta.pbs
+
+AMR_annotate_csv.py
+    Purpose:
+        Combine ABRicate hits with Panaroo gene_presence_absence.csv and keep
+        gene clusters with a hit in at least one AMR database.
+    Main inputs:
+        ./both-align-results-strict-adv/gene_presence_absence.csv
+        ABRicate result tables under ./AMR_annotation/
+    Main output:
+        ./both-align-results-strict-adv/amr_gene_presence_absence_longCentroidID.csv
+    Usage:
+        Edit panaroo_csv, abricate_files, and output_filtered if needed, then
+        run:
+
+            python AMR_annotate_csv.py
+
+map_amr_and_panaroo.py
+    Purpose:
+        Build a JSON dictionary mapping Panaroo gene-cluster IDs to AMR gene
+        names. AMR names are prefixed with "amr_".
+    Main input:
+        ./both-align-results-strict-adv/amr_gene_presence_absence.csv
+    Main output:
+        ./both-align-results-strict-adv/amr_panaroo_dict.json
+    Usage:
+        Edit the input/output paths if needed, then run:
+
+            python map_amr_and_panaroo.py
+
+rgi-annotation.pbs
+    Purpose:
+        Extract CDS/rRNA/tRNA sequences from post-Panaroo GFF files and run RGI
+        annotation-related processing on the resulting FASTA files.
+    Main input:
+        ./both-align-results-strict-adv/postpanaroo_gffs/
+    Main output:
+        ./both-align-results-strict-adv/postpanaroo_fas/
+    Usage:
+        Edit GFF_DIR, OUTPUT_BASE_DIR, THREADS, and environment settings if
+        needed, then submit:
+
+            qsub rgi-annotation.pbs
+
+rgi_result_analyse.py
+    Purpose:
+        Parse RGI JSON outputs and collect unique functional mutation models
+        with selected model_type_id values.
+    Main input:
+        ./both-align-results-strict-adv/rgi_results/
+    Main output:
+        all_functional_mutations.txt
+    Usage:
+        Edit rgi_root if needed, then run:
+
+            python rgi_result_analyse.py
