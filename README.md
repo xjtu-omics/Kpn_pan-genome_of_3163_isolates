@@ -24,20 +24,28 @@ The repository is organized by analysis stage, so each top-level directory repre
 ## Workflow Overview
 
 ```text
-Genome assemblies
+Genome assemblies (annotated)
       |
       v
 Pan-genome construction and AMR annotation
       |
       v
-Feature extraction from pan-genome, SNP, and annotation outputs
+Gene cluster cleaning
+      |
+      v
+Core-gene variant calling and synonymous substitution filtering
+      |
+      v
+Rare feature filtering
       |
       v
 Feature selection by statistical tests and ML-based ranking
       |
       v
 Candidate determination and model training
-      |
+      |                         |
+      |                         v
+      |                  Model testing and validation
       v
-Trained models, downstream analysis, and publication figures
+Downstream analysis
 ```
