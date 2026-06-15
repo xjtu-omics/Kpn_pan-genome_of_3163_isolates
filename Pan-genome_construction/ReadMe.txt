@@ -11,14 +11,6 @@ Most scripts in this folder use fixed relative paths. Before running them,
 check the input and output paths near the top of each script and edit them for
 the current working directory.
 
-PBS or shell scripts can be submitted on a cluster with:
-
-    qsub <script>.pbs
-
-Python scripts can be run with:
-
-    python <script>.py
-
 Scripts
 -------
 
@@ -36,18 +28,14 @@ run_Panaroo.pbs
         0.9, 48 threads, and writes results to result.
     Usage:
         Put input .gff files in the working directory or adjust the -i path,
-        activate the panaroo environment, then run:
-
-            qsub run_Panaroo.pbs
+        activate the panaroo environment, then submit.
 
 update_gff.pbs
     Purpose:
         Run panaroo-generate-gffs to update input GFF files for downstream
         Panaroo analysis.
     Usage:
-        Place source GFF files under GFFs or edit the -i path. Submit with:
-
-            qsub update_gff.pbs
+        Place source GFF files under GFFs or edit the -i path, then submit.
 
 longCentroidID_ref_from_gml.py
     Purpose:
