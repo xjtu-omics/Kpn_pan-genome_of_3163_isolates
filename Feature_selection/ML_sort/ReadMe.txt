@@ -29,7 +29,7 @@ script.py
         feature-ranking methods on the train set.
     Split logic:
         GN samples are kept in the train/test pool. Non-GN samples are split so
-        that part of them form an external validation set. The train/test pool
+        that half of them form an external validation set. The train/test pool
         is then split 70:30 with stratification when possible.
     Main inputs:
         phenotypes.csv
@@ -37,8 +37,8 @@ script.py
         final_dispensable_feature_matrix.csv
     Main outputs:
         <antibiotic>
-        including train/test/validation CSV files, model metrics, confusion
-        matrices, and feature-importance ranking CSV files.
+        including train/test/validation CSV files, model metrics on train pool, 
+        confusion matrices on train pool, and feature-importance ranking CSV files.
     Usage:
 
             python script.py
@@ -55,14 +55,14 @@ RF.py
 
 LR.py
     Purpose:
-        Train an L1-regularized logistic regression model and export feature
+        Train a logistic regression model and export feature
         weights, prediction metrics, and a confusion-matrix figure.
     Usage:
         Imported and called by script.py through LR.model_train().
 
 SVM.py
     Purpose:
-        Train an L1-regularized linear SVM after standardization and export
+        Train a linear SVM after standardization and export
         feature weights, prediction metrics, and a confusion-matrix figure.
     Usage:
         Imported and called by script.py through SVM.model_train().
