@@ -53,10 +53,10 @@ chi_kw.py
         Kruskal-Wallis tests at p < 0.05, then save the selected features in a
         JSON dictionary keyed by antibiotic.
     Main inputs:
-        dispensable_chisquare.csv
-        dispensable_kw.csv
+        dispensable_chisquare.csv/core_chisquare.csv
+        dispensable_kw.csv/core_kw.csv
     Main output:
-        chi_and_kw_dispensable.json
+        chi_and_kw_dispensable.json/chi_and_kw_core.json
     Usage:
         Edit the input/output paths for core or dispensable features as needed,
         then run:
