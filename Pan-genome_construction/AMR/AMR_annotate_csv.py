@@ -3,12 +3,12 @@ import pandas as pd
 # Input file
 panaroo_csv = "./both-align-results-strict-adv/gene_presence_absence.csv"
 abricate_files = {
-    "CARD": "./AMR_annotation/both_card_results_longCentroidID.tab",
-    "NCBI": "./AMR_annotation/both_ncbi_results_longCentroidID.tab",
-    "ResFinder": "./AMR_annotation/both_resfinder_results_longCentroidID.tab"
+    "CARD": "./AMR_annotation/both_card_results.tab",
+    "NCBI": "./AMR_annotation/both_ncbi_results.tab",
+    "ResFinder": "./AMR_annotation/both_resfinder_results.tab"
 }
 #output_all = "./both-align-results-strict/panaroo_with_resistance_all.csv"
-output_filtered = "./both-align-results-strict-adv/amr_gene_presence_absence_longCentroidID.csv"
+output_filtered = "./both-align-results-strict-adv/amr_gene_presence_absence.csv"
 
 # Read the panaroo output and use low_memory=False to avoid dtype warnings
 df = pd.read_csv(panaroo_csv, low_memory=False)
