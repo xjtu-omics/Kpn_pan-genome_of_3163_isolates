@@ -1,6 +1,6 @@
 # Kpn Pan-Genome Analysis of 3,163 Isolates
 
-This repository contains scripts, trained models, and plotting utilities for a pan-genome-based analysis of 3,163 *Klebsiella pneumoniae* isolates. The workflow covers pan-genome construction, feature extraction, feature selection, candidate determination, model training, downstream analysis, and figure generation. AMR phenotype data used in this study is also uploaded here.
+This repository contains scripts, trained models, plotting utilities, and necessary related data for a pan-genome-based analysis of 3,163 *Klebsiella pneumoniae* isolates. The workflow covers pan-genome construction, feature extraction, feature selection, candidate determination, model training, downstream analysis, and figure generation. AMR phenotypes used in this workflow and some analysis outputs generated from this study are also included here.
 
 ## Directory Guide
 
@@ -16,12 +16,12 @@ The repository is organized by analysis stage, so each top-level directory repre
 | Code | `Plot/` | Contains scripts for generating main and supplementary figures. |
 | Input Data | `AMR_phenotypes/` | Contains AMR phenotype data for HuiNet isolates (with GN-prefixed sample IDs) and PATRIC isolates (with GC-prefixed sample IDs); some PATRIC phenotypes are not available in the source database. |
 | Intermediate files | `Candidate_feature_matrices/` | Selected candidate feature matrices for model training, testing and validation. |
-| Result | `Trained_models/` | Stores serialized trained model artifacts for 17 antimicrobial phenotypes. |
-| Result | `Gene_seqs_of_candidates/` | DNA sequences and translated protein sequences for the longCentroids of each candidate gene cluster. |
+| Result | `Trained_models/` | Trained model files for 17 antimicrobial phenotypes. |
+| Result | `Gene_seqs_of_candidates/` | DNA sequences and translated protein sequences of the longCentroids of each candidate gene cluster. |
 
 ## Code Guide
 
-Usage documentation for each script will be provided in the README file in the same folder.
+Usage documentation for each script is provided in the README file in the same folder.
 
 ## Workflow Overview
 
