@@ -6,19 +6,18 @@ This repository contains scripts, trained models, and plotting utilities for a p
 
 The repository is organized by analysis stage, so each top-level directory represents one major part of the pipeline.
 
-| Directory | Purpose |
-| --- | --- |
-| `Pan-genome_construction/` | Builds and post-processes the pan-genome, including genome annotation, Panaroo execution, GFF updates, AMR annotation, and gene cluster cleaning of pan-genome outputs. |
-| `Feature_extraction/` | Identifies core-gene variants through single-base-resolution alignment, annotates variants with snpEff, retains non-synonymous variants, and encodes them together with dispensable gene presence/absence into binary feature matrices. |
-| `Feature_selection/` | Screens the full feature set using statistical tests and ranks features based on machine-learning-derived importance scores. |
-| `Candidates_determine_and_model_train/` | Determines candidate features, prepares selected feature matrices, trains models, tests and validates performance, and saves model artifacts. |
-| `Further_analyzation/` | Performs downstream biological analyses, including candidate-feature prioritization and transposon-associated genomic pattern analysis. |
-| `Plot/` | Contains scripts for generating main and supplementary figures. |
-| **Data files and derived outputs** | **The entries below contain data files, trained models, and candidate sequence resources.** |
-| `AMR_phenotypes/` | Contains AMR phenotype data for HuiNet isolates (with GN-prefixed sample IDs) and PATRIC isolates (with GC-prefixed sample IDs); some PATRIC phenotypes are not available in the source database. |
-| `Trained_models/` | Stores serialized trained model artifacts for 17 antimicrobial phenotypes. |
-| `Candidate_feature_matrices/` | Selected candidate feature matrices for model training, testing and validation. |
-| `Gene_seqs_of_candidates/` | DNA sequences and translated protein sequences for the longCentroids of each candidate gene cluster. |
+| Module type | Directory | Purpose |
+| --- | --- | --- |
+| Code | `Pan-genome_construction/` | Builds and post-processes the pan-genome, including genome annotation, Panaroo execution, GFF updates, AMR annotation, and gene cluster cleaning of pan-genome outputs. |
+| Code | `Feature_extraction/` | Identifies core-gene variants through single-base-resolution alignment, annotates variants with snpEff, retains non-synonymous variants, and encodes them together with dispensable gene presence/absence into binary feature matrices. |
+| Code | `Feature_selection/` | Screens the full feature set using statistical tests and ranks features based on machine-learning-derived importance scores. |
+| Code | `Candidates_determine_and_model_train/` | Determines candidate features, prepares selected feature matrices, trains models, tests and validates performance, and saves model artifacts. |
+| Code | `Further_analyzation/` | Performs downstream biological analyses, including candidate-feature prioritization and transposon-associated genomic pattern analysis. |
+| Code | `Plot/` | Contains scripts for generating main and supplementary figures. |
+| Input Data | `AMR_phenotypes/` | Contains AMR phenotype data for HuiNet isolates (with GN-prefixed sample IDs) and PATRIC isolates (with GC-prefixed sample IDs); some PATRIC phenotypes are not available in the source database. |
+| Output Result | `Trained_models/` | Stores serialized trained model artifacts for 17 antimicrobial phenotypes. |
+| Output Result | `Candidate_feature_matrices/` | Selected candidate feature matrices for model training, testing and validation. |
+| Output Result | `Gene_seqs_of_candidates/` | DNA sequences and translated protein sequences for the longCentroids of each candidate gene cluster. |
 
 ## Code Guide
 
